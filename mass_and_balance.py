@@ -1,5 +1,7 @@
 
 import numpy as np
+import scipy.io as sio
+from scipy import integrate
 
 """ Conversions """
 def inches_to_m(inches):
@@ -135,6 +137,28 @@ fuel_moments = np.array([298.16, 591.18, 879.08, 1165.42,
                          11705.50, 11993.31, 12281.18, 12569.04])
 
 fuel_xcgs = fuel_moments/fuel_loads
+
+
+
+""" Import data from matlab """
+matlab_data = sio.loadmat('matlab.mat')
+fuel_flow_left  = np.array(matlab_data['flightdata']['lh_engine_FMF'][0][0][0][0][0]).reshape(48321)*lbshr_to_kgsec(1)
+fuel_flow_right = np.array(matlab_data['flightdata']['rh_engine_FMF'][0][0][0][0][0]).reshape(48321)*lbshr_to_kgsec(1)
+fuel_out_left = np.array(matlab_data['flightdata']['rh_engine_FU'][0][0][0][0][0]).reshape(48321)*pounds_to_kg(1)
+fuel_out_right = np.array(matlab_data['flightdata']['rh_engine_FU'][0][0][0][0][0]).reshape(48321)*pounds_to_kg(1)
+# fuel_out = np.array([0.]+ list(integrate.cumtrapz(fuel_flow_left+fuel_flow_right, time))) # To verify
+fuel_out = fuel_out_right + fuel_out_left                                               # Fuel burnt along time [kg]
+fuel_mass = pounds_to_kg(4050)-fuel_out                                                 # Fuel Mass along time  [kg]
+time = np.array(matlab_data['flightdata']['time'][0][0][0][0][0][0])                    # Time values           [s]
+
+
+""" 
+To update Fuel Component mass:
+
+components['FL'].mass_ = np.interp(t, time, fuel_mass)
+
+Where t is a specific time
+"""
 
 
 

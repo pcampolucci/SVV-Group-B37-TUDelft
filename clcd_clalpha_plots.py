@@ -1,55 +1,12 @@
 from mass_and_balance import *
 import matplotlib.pyplot as plt
-import scipy.io as sio
-from scipy import integrate
+
 import numpy as np
 
 g = 9.807   # Gravity
 S = 30      # Surface Area [m^2]
 c = 2.0569  # Chord [m]
 b = 15.911  # Span [m]
-
-
-""" Import data from matlab """
-matlab_data = sio.loadmat('matlab.mat')
-fuel_flow_left  = np.array(matlab_data['flightdata']['lh_engine_FMF'][0][0][0][0][0]).reshape(48321)*lbshr_to_kgsec(1)
-fuel_flow_right = np.array(matlab_data['flightdata']['rh_engine_FMF'][0][0][0][0][0]).reshape(48321)*lbshr_to_kgsec(1)
-fuel_out_left = np.array(matlab_data['flightdata']['rh_engine_FU'][0][0][0][0][0]).reshape(48321)*pounds_to_kg(1)
-fuel_out_right = np.array(matlab_data['flightdata']['rh_engine_FU'][0][0][0][0][0]).reshape(48321)*pounds_to_kg(1)
-# fuel_out = np.array([0.]+ list(integrate.cumtrapz(fuel_flow_left+fuel_flow_right, time)))
-fuel_out = fuel_out_right + fuel_out_left
-fuel_mass = pounds_to_kg(4050)-fuel_out
-time = np.array(matlab_data['flightdata']['time'][0][0][0][0][0][0])
-
-
-""" From: Table E.2. Citation II fuel moments with respect to the datum line """
-
-fuel_loads = np.array([pounds_to_kg(100), pounds_to_kg(200), pounds_to_kg(300), pounds_to_kg(400),
-                        pounds_to_kg(500), pounds_to_kg(600), pounds_to_kg(700), pounds_to_kg(800),
-                        pounds_to_kg(900), pounds_to_kg(1000), pounds_to_kg(1100), pounds_to_kg(1200),
-                        pounds_to_kg(1300), pounds_to_kg(1400), pounds_to_kg(1500), pounds_to_kg(1600),
-                        pounds_to_kg(1700), pounds_to_kg(1800), pounds_to_kg(1900), pounds_to_kg(2000),
-                        pounds_to_kg(2100), pounds_to_kg(2200), pounds_to_kg(2300), pounds_to_kg(2400),
-                        pounds_to_kg(2500), pounds_to_kg(2600), pounds_to_kg(2700), pounds_to_kg(2800),
-                        pounds_to_kg(2900), pounds_to_kg(3000), pounds_to_kg(3100), pounds_to_kg(3200),
-                        pounds_to_kg(3300), pounds_to_kg(3400), pounds_to_kg(3500), pounds_to_kg(3600),
-                        pounds_to_kg(3700), pounds_to_kg(3800), pounds_to_kg(3900), pounds_to_kg(4000),
-                        pounds_to_kg(4100), pounds_to_kg(4200), pounds_to_kg(4300), pounds_to_kg(4400)])
-
-fuel_moments = np.array([298.16, 591.18, 879.08, 1165.42,
-                         1448.40, 1732.53, 2014.80, 2298.84,
-                         2581.92, 2866.30, 3150.18, 3434.52,
-                         3718.52, 4003.23, 4287.76, 4572.24,
-                         4856.56, 5141.16, 5425.64, 5709.90,
-                         5994.04, 6278.47, 6562.82, 6846.96,
-                         7131.00, 7415.33, 7699.60, 7984.34,
-                         8269.06, 8554.05, 8839.04, 9124.80,
-                         9410.62, 9696.97, 9983.40, 10270.08,
-                         10556.84, 10843.87, 11131.00, 11418.20,
-                         11705.50, 11993.31, 12281.18, 12569.04])
-
-fuel_xcgs = fuel_moments/fuel_loads
-
 
 t_measurements_1 = [19*60+17, 21*60+37, 23*60+46, 26*60+4, 29*60+47, 32*60]
 
