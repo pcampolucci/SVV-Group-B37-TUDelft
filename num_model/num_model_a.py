@@ -36,9 +36,10 @@ C = np.matrix([[1, 0, 0, 0],
                [0, 0, 0, 1]])
 D = np.matrix([[0, 0], [0, 0], [0, 0], [0, 0]])
 
-t_sim = 120
+t_sim = 7
 dt_sim = 0.05
 num_dts = int(t_sim/dt_sim)
+dts = dt_sim*np.ones(num_dts)
 t = np.linspace(0,t_sim, num_dts)
 sys = c.ss(A,B,C,D)
 print(sys)
@@ -46,6 +47,7 @@ print(sys)
 sys_response = c.impulse_response(sys, t)
 # print('u', sys_response[1][0][-1],'a', sys_response[1][1][-1],'t', sys_response[1][2][-1],'q', sys_response[1][3][-1],)
 print(sys_response[1][1])
-plt.plot(sys_response[0], sys_response[1][0])
+roll = np.cumsum(sys_response[1][2]*dts)
+plt.plot(sys_response[0], roll)
 plt.show()
 print(sys_response[1][0][0])
