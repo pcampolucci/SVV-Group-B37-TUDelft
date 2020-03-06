@@ -3,6 +3,9 @@ import numpy as np
 import scipy.io as sio
 from scipy import integrate
 
+
+FW = 4050      # [lbs]
+
 """ Conversions """
 def inches_to_m(inches):
     return inches*0.0254
@@ -55,8 +58,9 @@ class Group:
         m = 0
 
         for component in self.components:
-            p += component.moment           # Moment contribution of sub component
-            m += component.mass             # Mass contribution of sub component
+
+            p += component.moment()           # Moment contribution of sub component
+            m += component.mass()             # Mass contribution of sub component
 
         return p / m
 
@@ -148,7 +152,7 @@ fuel_out_left = np.array(matlab_data['flightdata']['rh_engine_FU'][0][0][0][0][0
 fuel_out_right = np.array(matlab_data['flightdata']['rh_engine_FU'][0][0][0][0][0]).reshape(48321)*pounds_to_kg(1)
 # fuel_out = np.array([0.]+ list(integrate.cumtrapz(fuel_flow_left+fuel_flow_right, time))) # To verify
 fuel_out = fuel_out_right + fuel_out_left                                               # Fuel burnt along time [kg]
-fuel_mass = pounds_to_kg(4050)-fuel_out                                                 # Fuel Mass along time  [kg]
+fuel_mass = pounds_to_kg(FW)-fuel_out                                                 # Fuel Mass along time  [kg]
 time = np.array(matlab_data['flightdata']['time'][0][0][0][0][0][0])                    # Time values           [s]
 
 
@@ -157,8 +161,15 @@ To update Fuel Component mass:
 
 components['FL'].mass_ = np.interp(t, time, fuel_mass)
 
+
 Where t is a specific time
 """
+
+
+
+
+
+
 
 
 

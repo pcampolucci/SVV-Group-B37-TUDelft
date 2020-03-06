@@ -23,6 +23,7 @@ for t in t_measurements_1:
     components['FL'].mass_ = np.interp(t, time, fuel_mass)
     lifts_1.append(components['TM'].weight())
 
+
 lifts_1 = np.array(lifts_1)
 CLs = lifts_1/(0.5*rhos_1*veloc_1**2*S)
 CDs = drags_1/(0.5*rhos_1*veloc_1**2*S)
