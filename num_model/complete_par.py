@@ -4,10 +4,10 @@ import numpy as np
 
 # Stationary flight condition
 
-hp0    =       	      # pressure altitude in the stationary flight condition [m]
-V0     =             # true airspeed in the stationary flight condition [m/sec]
-alpha0 =             # angle of attack in the stationary flight condition [rad]
-th0    =             # pitch angle in the stationary flight condition [rad]
+hp0    =  1000     	      # pressure altitude in the stationary flight condition [m]
+V0     =  100        # true airspeed in the stationary flight condition [m/sec]
+alpha0 =  0.02           # angle of attack in the stationary flight condition [rad]
+th0    =  0.06           # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
 m      = 4157.174            # mass [kg]
@@ -28,7 +28,7 @@ Sh     = 0.2 * S         # stabiliser area [m^2]
 Sh_S   = Sh / S	          # [ ]
 lh     = 0.71 * 5.968    # tail length [m]
 c      = 2.0569	          # mean aerodynamic cord [m]
-xcg    = 0.25 * c
+xcg    = 0.05 * c
 lh_c   = lh / c	          # [ ]
 b      = 15.911	          # wing span [m]
 bh     = 5.791	          # stabilser span [m]
