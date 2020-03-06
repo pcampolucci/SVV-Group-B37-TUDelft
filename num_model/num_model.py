@@ -26,7 +26,7 @@ C1_inv = np.linalg.inv(C1)
 C2_inv = np.linalg.inv(C2)
 A = - np.matmul(C1_inv, C2)
 B = - np.matmul(C2_inv, C3)
-B[0,0] = 0.
+# B[0,0] = 0.
 C = np.matrix([[1, 0, 0, 0],
                [0, 1, 0, 0],
                [0, 0, 1, 0],
@@ -38,5 +38,5 @@ sys = c.ss(A,B,C,D)
 sys_response = c.impulse_response(sys, t)
 print('u', sys_response[1][0][-1],'a', sys_response[1][1][-1],'t', sys_response[1][2][-1],'q', sys_response[1][3][-1],)
 
-plt.plot(sys_response[0], sys_response[1][1])
+plt.plot(sys_response[0], sys_response[1][0])
 plt.show()
