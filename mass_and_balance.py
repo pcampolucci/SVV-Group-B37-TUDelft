@@ -116,31 +116,17 @@ components[name].xcg() to get xcg       [m]
 
 """ From: Table E.2. Citation II fuel moments with respect to the datum line """
 
-fuel_loads = np.array([pounds_to_kg(100), pounds_to_kg(200), pounds_to_kg(300), pounds_to_kg(400),
-                        pounds_to_kg(500), pounds_to_kg(600), pounds_to_kg(700), pounds_to_kg(800),
-                        pounds_to_kg(900), pounds_to_kg(1000), pounds_to_kg(1100), pounds_to_kg(1200),
-                        pounds_to_kg(1300), pounds_to_kg(1400), pounds_to_kg(1500), pounds_to_kg(1600),
-                        pounds_to_kg(1700), pounds_to_kg(1800), pounds_to_kg(1900), pounds_to_kg(2000),
-                        pounds_to_kg(2100), pounds_to_kg(2200), pounds_to_kg(2300), pounds_to_kg(2400),
-                        pounds_to_kg(2500), pounds_to_kg(2600), pounds_to_kg(2700), pounds_to_kg(2800),
-                        pounds_to_kg(2900), pounds_to_kg(3000), pounds_to_kg(3100), pounds_to_kg(3200),
-                        pounds_to_kg(3300), pounds_to_kg(3400), pounds_to_kg(3500), pounds_to_kg(3600),
-                        pounds_to_kg(3700), pounds_to_kg(3800), pounds_to_kg(3900), pounds_to_kg(4000),
-                        pounds_to_kg(4100), pounds_to_kg(4200), pounds_to_kg(4300), pounds_to_kg(4400)])
+fuel_loads = np.array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200,
+                        1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400,
+                        2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600,
+                        3700, 3800, 3900, 4000, 4100, 4200, 4300, 4400])
 
-fuel_moments = np.array([298.16, 591.18, 879.08, 1165.42,
-                         1448.40, 1732.53, 2014.80, 2298.84,
-                         2581.92, 2866.30, 3150.18, 3434.52,
-                         3718.52, 4003.23, 4287.76, 4572.24,
-                         4856.56, 5141.16, 5425.64, 5709.90,
-                         5994.04, 6278.47, 6562.82, 6846.96,
-                         7131.00, 7415.33, 7699.60, 7984.34,
-                         8269.06, 8554.05, 8839.04, 9124.80,
-                         9410.62, 9696.97, 9983.40, 10270.08,
-                         10556.84, 10843.87, 11131.00, 11418.20,
-                         11705.50, 11993.31, 12281.18, 12569.04])
+fuel_moments = np.array([298.16, 591.18, 879.08, 1165.42, 1448.40, 1732.53, 2014.80, 2298.84, 2581.92, 2866.30, 3150.18, 3434.52,
+                         3718.52, 4003.23, 4287.76, 4572.24, 4856.56, 5141.16, 5425.64, 5709.90, 5994.04, 6278.47, 6562.82, 6846.96,
+                         7131.00, 7415.33, 7699.60, 7984.34, 8269.06, 8554.05, 8839.04, 9124.80, 9410.62, 9696.97, 9983.40, 10270.08,
+                         10556.84, 10843.87, 11131.00, 11418.20, 11705.50, 11993.31, 12281.18, 12569.04])
 
-fuel_xcgs = fuel_moments/fuel_loads
+fuel_xcgs = inches_to_m(fuel_moments)/fuel_loads
 
 
 
