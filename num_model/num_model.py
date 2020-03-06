@@ -8,35 +8,39 @@ import matplotlib.pyplot as plt
 #velocity should not go back to 0
 #aoa, pitch and pitch rate make sense to go to 0
 
-C1 = np.matrix([[-2*par.muc*par.c, 0, 0, 0],
+C1 = np.matrix([[-2*par.muc*par.c/(par.V0**2), 0, 0, 0],
                 [0, (par.CZadot - 2*par.muc)*par.c/par.V0, 0, 0],
                 [0,0, -par.c/par.V0, 0],
-                [0, par.Cmadot, 0, -2*par.muc*par.KZ2]])
-C2 = - np.matrix([[-par.CXu*par.V0, -par.CXa*par.V0, -par.CZ0, 0],
-                  [-par.CZu, -par.CZa, par.CX0, -par.CZq - 2*par.muc],
-                  [0, 0, 0, -1],
-                  [-par.Cmu*par.V0/par.c, -par.Cma*par.V0/par.c, 0, -par.Cmq*par.V0/par.c]])
-C3 = - np.matrix([[-par.CXde*par.V0],
-                  [-par.CZde*par.V0],
+                [0, par.Cmadot*par.c/par.V0, 0, -2*par.muc*par.KY2*(par.c/par.V0)**2]])
+C2 = - np.matrix([[-par.CXu/par.V0, -par.CXa, -par.CZ0, 0],
+                  [-par.CZu/par.V0, -par.CZa, par.CX0, (-par.CZq - 2*par.muc)/(par.c/par.V0)],
+                  [0, 0, 0, -1/(par.c/par.V0)],
+                  [-par.Cmu/par.V0, -par.Cma, 0, -par.Cmq*par.c/par.V0]])
+C3 = - np.matrix([[-par.CXde],
+                  [-par.CZde],
                   [0],
-                  [-par.Cmde*par.V0/par.c]])
+                  [-par.Cmde]])
 
-
+# print(C1)
+# print(C2)
+# print(C3)
 C1_inv = np.linalg.inv(C1)
 C2_inv = np.linalg.inv(C2)
 A = - np.matmul(C1_inv, C2)
 B = - np.matmul(C2_inv, C3)
-# B[0,0] = 0.
+print(A)
+print(B)
 C = np.matrix([[1, 0, 0, 0],
                [0, 1, 0, 0],
                [0, 0, 1, 0],
                [0, 0, 0, 1]])
 D = np.matrix([[0], [0], [0], [0]])
 
-t = np.linspace(0,5, 500)
+t = np.linspace(0,0.5, 40)
 sys = c.ss(A,B,C,D)
+print(sys)
 sys_response = c.impulse_response(sys, t)
-print('u', sys_response[1][0][-1],'a', sys_response[1][1][-1],'t', sys_response[1][2][-1],'q', sys_response[1][3][-1],)
-
+# print('u', sys_response[1][0][-1],'a', sys_response[1][1][-1],'t', sys_response[1][2][-1],'q', sys_response[1][3][-1],)
+print(sys_response[1][1])
 plt.plot(sys_response[0], sys_response[1][0])
 plt.show()
