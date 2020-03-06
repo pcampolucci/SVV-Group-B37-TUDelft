@@ -18,13 +18,16 @@ def pounds_to_kg(pounds):
 def lbshr_to_kgsec(lbshr):
     return lbshr/7936.64
 
+def lbsinch_to_kgm(lbsinch):
+    return 0.0115212462*lbsinch
+
 
 def t_to_idx(t, A):
     return (np.abs(A-t)).argmin()
 
 def update_fuel_balance(t):
     components['FL'].mass_ = np.interp(t, time, fuel_mass)
-    components['FL'].xcg_  = np.intep(components['FL'].mass(), fuel_loads, fuel_xcgs)
+    components['FL'].xcg_  = np.interp(components['FL'].mass(), fuel_loads, fuel_xcgs)
 
 
 """ Represents an object having a mass and a center of gravity. Used for stability calculations """
@@ -120,18 +123,17 @@ components[name].xcg() to get xcg       [m]
 
 """ From: Table E.2. Citation II fuel moments with respect to the datum line """
 
-fuel_loads = np.array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200,
+fuel_loads = pounds_to_kg( np.array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200,
                         1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400,
                         2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600,
-                        3700, 3800, 3900, 4000, 4100, 4200, 4300, 4400])
+                        3700, 3800, 3900, 4000, 4100, 4200, 4300, 4400]))
 
-fuel_moments = np.array([298.16, 591.18, 879.08, 1165.42, 1448.40, 1732.53, 2014.80, 2298.84, 2581.92, 2866.30, 3150.18, 3434.52,
+fuel_moments = lbsinch_to_kgm(np.array([298.16, 591.18, 879.08, 1165.42, 1448.40, 1732.53, 2014.80, 2298.84, 2581.92, 2866.30, 3150.18, 3434.52,
                          3718.52, 4003.23, 4287.76, 4572.24, 4856.56, 5141.16, 5425.64, 5709.90, 5994.04, 6278.47, 6562.82, 6846.96,
                          7131.00, 7415.33, 7699.60, 7984.34, 8269.06, 8554.05, 8839.04, 9124.80, 9410.62, 9696.97, 9983.40, 10270.08,
-                         10556.84, 10843.87, 11131.00, 11418.20, 11705.50, 11993.31, 12281.18, 12569.04])
+                         10556.84, 10843.87, 11131.00, 11418.20, 11705.50, 11993.31, 12281.18, 12569.04]))*100
 
-fuel_xcgs = inches_to_m(fuel_moments)/fuel_loads
-
+fuel_xcgs = fuel_moments/fuel_loads
 
 
 """ Import data from matlab """
@@ -153,7 +155,18 @@ components['FL'].mass_ = np.interp(t, time, fuel_mass)
 
 
 Where t is a specific time
+
 """
+
+
+print(components['TM'].xcg())
+update_fuel_balance(1000)
+print(components['TM'].xcg())
+
+
+
+print(fuel_xcgs)
+
 
 
 
