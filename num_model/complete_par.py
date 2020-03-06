@@ -5,7 +5,7 @@ import numpy as np
 # Stationary flight condition
 
 hp0    =  1000     	      # pressure altitude in the stationary flight condition [m]
-V0     =  400          # true airspeed in the stationary flight condition [m/sec]
+V0     =  50          # true airspeed in the stationary flight condition [m/sec]
 alpha0 =  0.02           # angle of attack in the stationary flight condition [rad]
 th0    =  0.06           # pitch angle in the stationary flight condition [rad]
 
