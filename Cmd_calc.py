@@ -21,6 +21,7 @@ components[moved_pax].xcg_ = inches_to_m(moved_to)
 
 xcg2 = components['TM'].xcg()
 
+W = 
 dxcg = xcg2-xcg1
 CN = W/(1/2*rho*V_m**2*S)
 Cmd = -1/dde * CN * dxcg / c

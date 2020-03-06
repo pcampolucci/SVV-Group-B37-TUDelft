@@ -22,6 +22,10 @@ def lbshr_to_kgsec(lbshr):
 def t_to_idx(t, A):
     return (np.abs(A-t)).argmin()
 
+def update_fuel_balance(t):
+    components['FL'].mass_ = np.interp(t, time, fuel_mass)
+    components['FL'].xcg_  = np.intep(components['FL'].mass(), fuel_loads, fuel_xcgs)
+
 
 """ Represents an object having a mass and a center of gravity. Used for stability calculations """
 class Component:
@@ -164,7 +168,6 @@ components['FL'].mass_ = np.interp(t, time, fuel_mass)
 
 Where t is a specific time
 """
-
 
 
 
