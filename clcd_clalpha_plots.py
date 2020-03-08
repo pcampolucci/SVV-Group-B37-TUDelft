@@ -16,16 +16,17 @@ drags = thrusts[:,0] + thrusts[:,1]
 
 
 weights = []
-for t in timestamps:
+
+for t in measurement_1.timestamps:
     update_fuel_balance(t)
     weights.append(components['TM'].weight())
 
 lifts = np.array(weights)
 
-CLs = lifts/(0.5*rho*Vt**2*S)
-CDs = drags/(0.5*rho*Vt**2*S)
+CLs = lifts/(0.5*measurement_1.rhos*measurement_1.VTASs**2*S)
+CDs = drags/(0.5*measurement_1.rhos*measurement_1.VTASs**2*S)
 
-A = np.vstack([alpha, np.ones(len(alpha))]).T
+A = np.vstack([measurement_1.alphas, np.ones(len(measurement_1.alphas))]).T
 CLa, CL0 = np.linalg.lstsq(A, CLs, rcond=None)[0]
 print('CLa: ', CLa, 'CL0: ', CL0)
 
