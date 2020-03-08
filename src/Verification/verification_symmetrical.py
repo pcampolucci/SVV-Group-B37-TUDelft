@@ -6,7 +6,7 @@ Title: Verification script for asymmetrical maneuvers. It will cover:
 Author: Casper Kanaar
 """
 import numpy as np 
-from ../../src.input.parameters_citation import *
+from src.input.parameters_citation import *
 
 # =============================================================================
 # Function definitions 
