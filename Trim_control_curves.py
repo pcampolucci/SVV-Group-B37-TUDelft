@@ -7,12 +7,13 @@ import numpy as np
 
 W = []
 
-for t in measurements_3.timestamps:
+for t in measurement_3.timestamps:
     update_fuel_balance(t)
     W.append(components['TM'].weight())
 
-Veq_tilde = Veq*np.sqrt(Ws/W)
-Fe_star = Fe*Ws/W
+Veq_tilde = measurement_3.VEASs*np.sqrt(Ws/np.array(W))
+Fe_star = measurement_3.Fes*Ws/W
 
 plt.scatter(Veq_tilde, Fe_star)
+plt.ylim(np.max(Fe_star)+10,np.min(Fe_star)-10)
 plt.show()
