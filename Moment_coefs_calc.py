@@ -2,7 +2,7 @@ from mass_and_balance import *
 from clcd_clalpha_plots import S,c
 from flight_data import *
 from conversions import *
-
+import matplotlib.pyplot as plt
 
 moved_pax = 'Seat 7'    #which passenger was moved?
 moved_to  =  134        #to which position?
@@ -34,3 +34,25 @@ Cmd = -1/dde * CN * dxcg / c
 print("Cn is: ", CN)
 print("Cmd is:", Cmd)
 
+
+A = np.vstack([measurements_3.alphas, np.ones(len(measurements_3.alphas))]).T
+c1, c2 = np.linalg.lstsq(A, measurements_3.deltas, rcond=None)[0]
+
+
+Cma = -c1*Cmd
+
+if __name__ == '__main__':
+    plt.scatter(alphas,deltas)
+    plt.xlabel('Alpha [deg]')
+    plt.ylabel(r'd$\delta_e$')
+    plt.title(r'd$\alpha')
+
+    plt.grid()
+    plt.axhline(y=0, color='k')
+    plt.axvline(x=0, color='k')
+
+    plt.show()
+
+    plt.show()
+
+print("Cma is:", Cma)

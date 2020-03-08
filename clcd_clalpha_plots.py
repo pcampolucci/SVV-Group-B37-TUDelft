@@ -17,7 +17,7 @@ drags = thrusts[:,0] + thrusts[:,1]
 
 weights = []
 for t in timestamps:
-    components['FL'].mass_ = np.interp(t, time, fuel_mass)
+    update_fuel_balance(t)
     weights.append(components['TM'].weight())
 
 lifts = np.array(weights)
@@ -38,24 +38,25 @@ alpha_ = np.linspace(-5, 15, 100)
 CLs_ = CL0 + CLa * alpha_
 CDs_ = CD0 + slope*CLs_**2
 
-plt.scatter(alpha, CLs)
-plt.plot(alpha_, CLs_)
-plt.xlabel('Alpha [deg]')
-plt.ylabel('CL [-]')
-plt.title('CL - Alpha')
-plt.grid()
-plt.axhline(y=0, color='k')
-plt.axvline(x=0, color='k')
-plt.show()
+if __name__ == '__main__':
+    plt.scatter(alpha, CLs)
+    plt.plot(alpha_, CLs_)
+    plt.xlabel('Alpha [deg]')
+    plt.ylabel('CL [-]')
+    plt.title('CL - Alpha')
+    plt.grid()
+    plt.axhline(y=0, color='k')
+    plt.axvline(x=0, color='k')
+    plt.show()
 
-plt.scatter(CDs, CLs)
-plt.plot(CDs_, CLs_)
-plt.xlabel('CD [-]')
-plt.ylabel('CL [-]')
-plt.title('CL - CD')
-plt.grid()
-plt.axhline(y=0, color='k')
-plt.axvline(x=0, color='k')
-plt.show()
+    plt.scatter(CDs, CLs)
+    plt.plot(CDs_, CLs_)
+    plt.xlabel('CD [-]')
+    plt.ylabel('CL [-]')
+    plt.title('CL - CD')
+    plt.grid()
+    plt.axhline(y=0, color='k')
+    plt.axvline(x=0, color='k')
+    plt.show()
 
 print('Mach Range: ')
