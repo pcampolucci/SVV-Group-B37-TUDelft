@@ -1,29 +1,14 @@
 
 import numpy as np
 import scipy.io as sio
+from conversions import *
 from scipy import integrate
 
 
 FW = 4050      # [lbs]
 
-""" Conversions """
-def inches_to_m(inches):
-    return inches*0.0254
 
 
-def pounds_to_kg(pounds):
-    return pounds*0.453592
-
-
-def lbshr_to_kgsec(lbshr):
-    return lbshr/7936.64
-
-def lbsinch_to_kgm(lbsinch):
-    return 0.0115212462*lbsinch
-
-
-def t_to_idx(t, A):
-    return (np.abs(A-t)).argmin()
 
 def update_fuel_balance(t):
     components['FL'].mass_ = np.interp(t, time, fuel_mass)
@@ -92,7 +77,7 @@ components['Seat 8'] = Component(inches_to_m(288), 86)
 components['Seat 10'] = Component(inches_to_m(170), 68)
 
 """ Baggage """
-components['Nose'] = Component(inches_to_m(131), pounds_to_kg(220))
+components['Nose'] = Component(inches_to_m(131), pounds_to_kg(0))
 components['Aft 1'] = Component(inches_to_m(131), 0)
 components['Aft 2'] = Component(inches_to_m(131), 0)
 
@@ -158,14 +143,6 @@ Where t is a specific time
 
 """
 
-
-print(components['TM'].xcg())
-update_fuel_balance(1000)
-print(components['TM'].xcg())
-
-
-
-print(fuel_xcgs)
 
 
 

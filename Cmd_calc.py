@@ -1,5 +1,8 @@
 from mass_and_balance import *
 from clcd_clalpha_plots import S,c
+from flight_data import *
+from conversions import *
+
 
 moved_pax = 'Seat 7'    #which passenger was moved?
 moved_to  =  134        #to which position?

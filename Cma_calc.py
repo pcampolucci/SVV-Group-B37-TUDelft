@@ -12,6 +12,16 @@ c1, c2 = np.linalg.lstsq(A, deltas, rcond=None)[0]
 
 Cma = -c1*Cmd
 plt.scatter(alphas,deltas)
+plt.xlabel('Alpha [deg]')
+plt.ylabel(r'd$\delta_e$')
+plt.title(r'd$\alpha')
+
+plt.grid()
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
+
+plt.show()
+
 plt.show()
 
 print("Cma is:", Cma)
