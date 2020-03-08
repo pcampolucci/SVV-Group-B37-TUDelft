@@ -11,12 +11,10 @@ g = 9.807
 R = 287
 Tgrad = -0.0065
 
-<<<<<<< HEAD
 Ws = 60500    #[N]
 mfs = 0.048   #[kg/sec]
 
 """ Flight Data """
-=======
 
 class MeasurementSet:
     def __init__(self, timestamps, hps, VCASs, alphas, FFls, FFrs, Fused, Tms, de = 0, detr = 0, Fe = 0):
@@ -33,7 +31,7 @@ class MeasurementSet:
         self.Fes = Fe
 
 """ Stationary Measurements CL-CD Series 1 """
->>>>>>> 51d9fe0265ec8b13d914e509b5c4b800fb61d008
+
 timestamps = np.array([19*60+17, 21*60+37, 23*60+46, 26*60+4, 29*60+47, 32*60])
 hps = feet_to_m(np.array([5010, 5020, 5020, 5030, 5020, 5110]))
 VCASs = kt_to_ms(np.array([249, 221, 192, 163, 130, 118]))
@@ -60,6 +58,6 @@ Fused = pounds_to_kg(np.array([664, 694, 730, 755, 798, 825, 846]))
 Tms = cdeg_to_kdeg(np.array([5.5, 4.5, 3.5, 2.5, 5.0, 6.2, 8.2]))
 
 
-measurement_2 = MeasurementSet(timestamps, hps, VCASs, alphas, FFl, FFr, Fused, Tms, des, detrs, Fes)
+measurement_3 = MeasurementSet(timestamps, hps, VCASs, alphas, FFl, FFr, Fused, Tms, des, detrs, Fes)
 print(measurement_1.des)
-print(measurement_2.des)
+print(measurement_3.des)

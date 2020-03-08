@@ -1,6 +1,6 @@
 from flight_data import *
 
-measurements = [measurement_1, measurement_2]
+measurements = [measurement_1, measurement_3]
 
 """ Determine Flight Conditions for each flight dataset """
 

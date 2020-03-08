@@ -40,7 +40,7 @@ CLs_ = CL0 + CLa * alpha_
 CDs_ = CD0 + slope*CLs_**2
 
 if __name__ == '__main__':
-    plt.scatter(alpha, CLs)
+    plt.scatter(measurement_1.alphas, CLs)
     plt.plot(alpha_, CLs_)
     plt.xlabel('Alpha [deg]')
     plt.ylabel('CL [-]')

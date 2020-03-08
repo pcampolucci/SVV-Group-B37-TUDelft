@@ -35,14 +35,14 @@ print("Cn is: ", CN)
 print("Cmd is:", Cmd)
 
 
-A = np.vstack([measurements_3.alphas, np.ones(len(measurements_3.alphas))]).T
-c1, c2 = np.linalg.lstsq(A, measurements_3.deltas, rcond=None)[0]
+A = np.vstack([measurement_3.alphas, np.ones(len(measurement_3.alphas))]).T
+c1, c2 = np.linalg.lstsq(A, measurement_3.des, rcond=None)[0]
 
 
 Cma = -c1*Cmd
 
 if __name__ == '__main__':
-    plt.scatter(alphas,deltas)
+    plt.scatter(measurement_3.alphas,measurement_3.des)
     plt.xlabel('Alpha [deg]')
     plt.ylabel(r'd$\delta_e$')
     plt.title(r'd$\alpha')
