@@ -74,7 +74,7 @@ CD = CD0 + (CLa * alpha0) ** 2 / (np.pi * A * e) # Drag coefficient [ ]
 
 CX0    = W * np.sin(th0) / (0.5 * rho * V0 ** 2 * S)
 CXu    = -0.02792
-CXa    = +0.47966		# Positive! (has been erroneously negative since 1993) 
+CXa    = +0.47966		# Positive! (has been erroneously negative since 1993)
 CXadot = +0.08330
 CXq    = -0.28170
 CXde   = -0.03728
@@ -91,7 +91,7 @@ Cmadot = +0.17800
 Cmq    = -8.79415
 
 CYb    = -0.7500
-CYbdot =  0     
+CYbdot =  0
 CYp    = -0.0304
 CYr    = +0.8495
 CYda   = -0.0400
@@ -104,7 +104,7 @@ Clda   = -0.23088
 Cldr   = +0.03440
 
 Cnb    =  +0.1348
-Cnbdot =   0     
+Cnbdot =   0
 Cnp    =  -0.0602
 Cnr    =  -0.2061
 Cnda   =  -0.0120
