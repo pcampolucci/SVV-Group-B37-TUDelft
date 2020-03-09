@@ -5,13 +5,10 @@ from flight_conditions import *
 
 import numpy as np
 
-g = 9.807   # Gravity
-S = 30      # Surface Area [m^2]
-c = 2.0569  # Chord [m]
-b = 15.911  # Span [m]
 
 
-thrusts = np.loadtxt('thrust.dat')
+
+thrusts = np.loadtxt('measurement_1_thrust.dat')
 drags = thrusts[:,0] + thrusts[:,1]
 
 

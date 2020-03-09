@@ -144,6 +144,9 @@ Where t is a specific time
 """
 
 
+print(components['TM'].mass())
+print(components['TM'].xcg())
+
 
 
 
