@@ -5,17 +5,18 @@ import numpy as np
 # Stationary flight condition
 
 hp0    =  1000     	      # pressure altitude in the stationary flight condition [m]
-V0     =  100        # true airspeed in the stationary flight condition [m/sec]
-alpha0 =  0.02           # angle of attack in the stationary flight condition [rad]
-th0    =  0.06           # pitch angle in the stationary flight condition [rad]
+V0     =  77      # true airspeed in the stationary flight condition [m/sec]
+alpha0 =  0.0          # angle of attack in the stationary flight condition [rad]
+th0    =  0          # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
-m      = 4157.174            # mass [kg]
+m      = 4000            # mass [kg] 4157.174
 
 # aerodynamic properties
 e      = 0.8         # Oswald factor [ ]
 CD0    = 0.04        # Zero lift drag coefficient [ ]
 CLa    = 5.084       # Slope of CL-alpha curve [ ]
+
 
 # Longitudinal stability
 Cma    =  -0.5626           # longitudinal stabilty [ ]
@@ -46,7 +47,9 @@ R      = 287.05          # specific gas constant [m^2/sec^2K]
 g      = 9.81            # [m/sec^2] (gravity constant)
 
 # air density [kg/m^3]  
-rho    = rho0 * np.power( ((1+(lam * hp0 / Temp0))), (-((g / (lam*R)) + 1)))
+rho    = rho0 #* np.power( ((1+(lam * hp0 / Temp0))), (-((g / (lam*R)) + 1)))
+# print(rho)
+# rho = 1.225
 W      = m * g            # [N]       (aircraft weight)
 
 # Constant values concerning aircraft inertia
@@ -67,8 +70,9 @@ depsda = 4 / (A + 2)            # Downwash gradient [ ]
 
 # Lift and drag coefficient
 
-CL = 2 * W / (rho * V0 ** 2 * S)              # Lift coefficient [ ]
-CD = CD0 + (CLa * alpha0) ** 2 / (np.pi * A * e) # Drag coefficient [ ]
+CL = 2 * W / (rho * V0 ** 2 * S)                    # Lift coefficient [ ]
+# CL = CLa*alpha0
+CD = CD0 + (CLa * alpha0) ** 2 / (np.pi * A * e)    # Drag coefficient [ ]
 
 # Stabiblity derivatives
 
