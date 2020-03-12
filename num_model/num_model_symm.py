@@ -68,48 +68,49 @@ else:
 # print('2', C2)
 # print('3', C3)
 
-t_sim = 60
-dt_sim = 0.05
-num_dts = int(t_sim/dt_sim)
-dts = dt_sim*np.ones(num_dts)
-t = np.linspace(0, t_sim, num_dts)
-if case == 'symmetric':
-    t_input = 4
-    input_nums = int(t_input//dt_sim)
-    elev_def1 = np.ones(input_nums)/3000
-    # elev_def2 = np.flip(np.cumsum(elev_def1))
-    elev_def2 = np.zeros(t.shape[0] - input_nums)
-    elev_def1 = np.cumsum(elev_def1)
-    # elev_def3 = np.zeros(300*3//5)
-    elev_defs = np.hstack([elev_def1, elev_def2])
-# elif case == 'asymmetric':
-#     continue
-
 #create state space linear system and compute system response
 sys = c.ss(A,B,C,D)
 #########################################
 ############# DEFINE INPUTS
-elev_defs = data.delta_e*np.pi/180
-start = 34400
-step = 15
+start = 37070
+step = 18
 stop = start + step*10
-elev_defs = elev_defs[start:stop]
 t = data.time[start:stop]
-sys_response = c.forced_response(sys, t, elev_defs)
+if case == 'symmetric':
+    elev_defs = data.delta_e*np.pi/180
+    elev_defs = elev_defs[start:stop]
+elif case == 'asymmetric':
+    delta_a = data.delta_a*np.pi/180
+    delta_r = data.delta_r*np.pi/180
+    inputs = np.vstack([delta_a, delta_r])
+    print(inputs.shape)
+    inputs = inputs[:,start:stop]
+
+
+if case == 'symmetric':
+    sys_response = c.forced_response(sys, t, elev_defs)
+    delta_e = elev_defs
+elif case == 'asymmetric':
+    sys_response = c.forced_response(sys, t, inputs)
+
 # sys_response = c.impulse_response(sys, t)
 ##########################################
 ########### convert stuff
-sys_response[1][0] = sys_response[1][0] + par.V0
-# print(sys_response[1][0][-1])
 pitch_angle = data.pitch_angle
 pitchrate = data.pitchrate
 AoAs = data.AoAs
-delta_e = elev_defs
-sli = -1
+roll = data.roll_angle
 
-sys_response[1][2][:sli] = sys_response[1][2][:sli]*180/np.pi + pitch_angle[start]
-sys_response[1][3][:sli] = sys_response[1][3][:sli]*180/np.pi + pitchrate[start]
-sys_response[1][1][:sli] = sys_response[1][1][:sli]*180/np.pi + AoAs[start]
+
+sli = -1
+if case == 'symmetric':
+    sys_response[1][2][:sli] = sys_response[1][2][:sli]*180/np.pi + pitch_angle[start]
+    sys_response[1][3][:sli] = sys_response[1][3][:sli]*180/np.pi + pitchrate[start]
+    sys_response[1][1][:sli] = sys_response[1][1][:sli]*180/np.pi + AoAs[start]
+elif case == 'asymmetric':
+    # sys_response[1][2][:sli] = sys_response[1][2][:sli]*180/np.pi + pitch_angle[start]
+    # sys_response[1][3][:sli] = sys_response[1][3][:sli]*180/np.pi + pitchrate[start]
+    sys_response[1][2][:sli] = sys_response[1][2][:sli]*180/np.pi + roll[start]
 
 ########################################################################
 ########################################################################
@@ -143,13 +144,13 @@ plt.rcParams.update({'font.size': 9})
 t = t-start/10 - 9
 
 
-plt.plot(t[:sli], sys_response[1][2][:sli], label = 'Pitch angle sim [deg]', color = tableau20[8])
-plt.plot(t[:sli], sys_response[1][3][:sli], label = 'Pitch rate sim [deg/s]', color = tableau20[5])
-# plt.plot(t[:sli], sys_response[1][1][:sli], label = 'Angle of attack sim [deg]', color = tableau20[2])
-plt.plot(t[:], pitch_angle[start:stop], label = 'Pitch angle data [deg]', color = tableau20[3])
-plt.plot(t[:], pitchrate[start:stop], label = 'Pitch rate data [deg/s]', color = tableau20[4])
+# plt.plot(t[:sli], sys_response[1][0][:sli], label = 'Yaw angle sim [deg]', color = tableau20[8])
+# plt.plot(t[:sli], sys_response[1][3][:sli], label = 'Pitch rate sim [deg/s]', color = tableau20[5])
+plt.plot(t[:sli], sys_response[1][2][:sli], label = 'Roll angle sim [deg]', color = tableau20[1])
+# plt.plot(t[:], pitch_angle[start:stop], label = 'Pitch angle data [deg]', color = tableau20[3])
+# plt.plot(t[:], pitchrate[start:stop], label = 'Pitch rate data [deg/s]', color = tableau20[4])
 # plt.plot(t[:], AoAs[start:stop], label = 'Angle of attack data [deg]', color = tableau20[10])
-# plt.plot(t[:], delta_e[:], label = 'Elevator deflection [deg]', color = tableau20[6])
+plt.plot(t[:], roll[start:stop], label = 'Roll angle data [deg]', color = tableau20[0])
 plt.legend()
 plt.savefig('Asymm.pdf', dpi = 1600)
 plt.show()

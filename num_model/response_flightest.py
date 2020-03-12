@@ -13,12 +13,17 @@ delta_e = flightdata[0][0][16][0][0][0][:,0]
 delta_r = flightdata[0][0][17][0][0][0][:,0]
 pitchrate = flightdata[0][0][26][0][0][0][:,0]
 pitch_angle = flightdata[0][0][21][0][0][0][:,0]
+roll_angle = flightdata[0][0][20][0][0][0][:,0]
+rollrate = flightdata[0][0][25][0][0][0][:,0]
+yawrate = flightdata[0][0][27][0][0][0][:,0]
 time = flightdata[0][0][47][0][0][0][0]
+
 dts = 0.1*np.ones(time.shape[0])
 
 ######################################################
 ######################################################
 
+''' PLOTTING STUFF'''
 
 ax = plt.subplot(111)
 ax.spines["top"].set_visible(False)
@@ -36,12 +41,13 @@ plt.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
 plt.minorticks_on()
 plt.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
 plt.rcParams.update({'font.size': 9})
-start = 34400
-step = 15
+start = 32400
+step = 20
 stop = start + step*10
+
 # plt.plot(time[start:stop], pitch_angle[start:stop], label = 'Pitch angle [deg]')
 # plt.plot(time[start:stop], pitchrate[start:stop], label = 'Pitch rate [deg]')
-# plt.plot(time[start:stop], AoAs[start:stop], label = 'Angle of attack [deg]')
-plt.plot(time[start:stop], delta_e[start:stop], label = 'Elevator deflection [deg]')
+plt.plot(time[start:stop]-start/10-9, delta_r[start:stop], label = 'Rudder deflection [deg]')
+plt.plot(time[start:stop]-start/10-9, delta_a[start:stop], label = 'Aileron deflection [deg]')
 plt.legend()
 plt.show()
