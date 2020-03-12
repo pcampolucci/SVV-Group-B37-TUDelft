@@ -1,5 +1,5 @@
 """
-Title: Verification script for asymmetrical maneuvers. It will cover:
+Title: verification script for asymmetrical maneuvers. It will cover:
        - Short period motion 
        - Phugoid motion
 
