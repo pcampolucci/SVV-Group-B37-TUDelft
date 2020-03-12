@@ -1,11 +1,12 @@
 import control as c
-import complete_par as par
+import maximo_pars as par
 import numpy as np
 import matplotlib.pyplot as plt
+import response_flightest as data
 
 #check if the results make sense and if feedback is needed.
 
-case = ''+'symmetric'
+case = 'a'+'symmetric'
 if case == 'symmetric':
     C1 = np.matrix([[-2*par.muc*par.c/(par.V0**2), 0, 0, 0],
                     [0, (par.CZadot - 2*par.muc)*par.c/par.V0, 0, 0],
@@ -86,27 +87,69 @@ if case == 'symmetric':
 
 #create state space linear system and compute system response
 sys = c.ss(A,B,C,D)
-########################################
-########### if we want to add feedback
-# if case == 'symmetric':
-#     K = np.matrix([0, 0, 0, 0])
-# elif case == 'asymmetric':
-#     K = np.matrix([[0, 0, 0, 0], [0, 0, 0, 0]])
-# sys1 = c.feedback(sys, K, 1)
 #########################################
+############# DEFINE INPUTS
+elev_defs = data.delta_e*np.pi/180
+start = 34400
+step = 15
+stop = start + step*10
+elev_defs = elev_defs[start:stop]
+t = data.time[start:stop]
 sys_response = c.forced_response(sys, t, elev_defs)
 # sys_response = c.impulse_response(sys, t)
 ##########################################
 ########### convert stuff
 sys_response[1][0] = sys_response[1][0] + par.V0
 # print(sys_response[1][0][-1])
-# for i in range(1,4):
-#     sys_response[1][i] = sys_response[1][i]*180/np.pi
-########### plotting stuff
+pitch_angle = data.pitch_angle
+pitchrate = data.pitchrate
+AoAs = data.AoAs
+delta_e = elev_defs
+sli = -1
+
+sys_response[1][2][:sli] = sys_response[1][2][:sli]*180/np.pi + pitch_angle[start]
+sys_response[1][3][:sli] = sys_response[1][3][:sli]*180/np.pi + pitchrate[start]
+sys_response[1][1][:sli] = sys_response[1][1][:sli]*180/np.pi + AoAs[start]
+
+########################################################################
+########################################################################
+########### PLOT STUFF
+tableau20 = [(255, 87, 87), (137, 255, 87), (87, 255, 249), (0, 0, 0),
+             (255, 33, 33), (255, 192, 33), (244, 255, 33), (64, 255, 175),
+             (225, 107, 255), (197, 176, 213), (140, 86, 75), (196, 156, 148),
+             (227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),
+             (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]
+
+for i in range(len(tableau20)):
+    r, g, b = tableau20[i]
+    tableau20[i] = (r / 255., g / 255., b / 255.)
+ax = plt.subplot(111)
+ax.spines["top"].set_visible(False)
+# ax.spines["bottom"].set_visible(False)
+ax.spines["right"].set_visible(False)
+# ax.spines["left"].set_visible(False)
+
+ax.get_xaxis().tick_bottom()
+ax.get_yaxis().tick_left()
+
+# Show the major grid lines with dark grey lines
+plt.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+
+# Show the minor grid lines with very faint and almost transparent grey lines
+plt.minorticks_on()
+plt.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+plt.rcParams.update({'font.size': 9})
+
+t = t-start/10 - 9
 
 
-plt.plot(sys_response[0], sys_response[1][2]*180/np.pi, sys_response[0], elev_defs*180/np.pi)
-plt.plot(sys_response[0], sys_response[1][0], sys_response[0], elev_defs*180/np.pi)
-plt.grid(color='b', linestyle='-', linewidth=0.2)
+plt.plot(t[:sli], sys_response[1][2][:sli], label = 'Pitch angle sim [deg]', color = tableau20[8])
+plt.plot(t[:sli], sys_response[1][3][:sli], label = 'Pitch rate sim [deg/s]', color = tableau20[5])
+# plt.plot(t[:sli], sys_response[1][1][:sli], label = 'Angle of attack sim [deg]', color = tableau20[2])
+plt.plot(t[:], pitch_angle[start:stop], label = 'Pitch angle data [deg]', color = tableau20[3])
+plt.plot(t[:], pitchrate[start:stop], label = 'Pitch rate data [deg/s]', color = tableau20[4])
+# plt.plot(t[:], AoAs[start:stop], label = 'Angle of attack data [deg]', color = tableau20[10])
+# plt.plot(t[:], delta_e[:], label = 'Elevator deflection [deg]', color = tableau20[6])
+plt.legend()
+plt.savefig('Asymm.pdf', dpi = 1600)
 plt.show()
-print('Max elevator deflection is: ',elev_defs[input_nums-1]*180/np.pi)
