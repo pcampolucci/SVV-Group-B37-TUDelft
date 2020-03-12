@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 #check if the results make sense and if feedback is needed.
 
-case = 'a'+'symmetric'
+case = ''+'symmetric'
 if case == 'symmetric':
     C1 = np.matrix([[-2*par.muc*par.c/(par.V0**2), 0, 0, 0],
                     [0, (par.CZadot - 2*par.muc)*par.c/par.V0, 0, 0],
@@ -84,8 +84,6 @@ if case == 'symmetric':
 # elif case == 'asymmetric':
 #     continue
 
-else:
-    print('eskere')
 #create state space linear system and compute system response
 sys = c.ss(A,B,C,D)
 ########################################
@@ -96,8 +94,8 @@ sys = c.ss(A,B,C,D)
 #     K = np.matrix([[0, 0, 0, 0], [0, 0, 0, 0]])
 # sys1 = c.feedback(sys, K, 1)
 #########################################
-# sys_response = c.forced_response(sys, t, elev_defs)
-sys_response = c.impulse_response(sys, t)
+sys_response = c.forced_response(sys, t, elev_defs)
+# sys_response = c.impulse_response(sys, t)
 ##########################################
 ########### convert stuff
 sys_response[1][0] = sys_response[1][0] + par.V0
@@ -105,11 +103,10 @@ sys_response[1][0] = sys_response[1][0] + par.V0
 # for i in range(1,4):
 #     sys_response[1][i] = sys_response[1][i]*180/np.pi
 ########### plotting stuff
-'''
-#
+
+
 plt.plot(sys_response[0], sys_response[1][2]*180/np.pi, sys_response[0], elev_defs*180/np.pi)
 plt.plot(sys_response[0], sys_response[1][0], sys_response[0], elev_defs*180/np.pi)
 plt.grid(color='b', linestyle='-', linewidth=0.2)
 plt.show()
 print('Max elevator deflection is: ',elev_defs[input_nums-1]*180/np.pi)
-'''
