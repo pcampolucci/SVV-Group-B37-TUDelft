@@ -29,7 +29,3 @@ def plot(x_array,y_array,labels,filename):
         
     plt.legend()
     plt.savefig(filename, dpi = 250)
-
-
-
-        
