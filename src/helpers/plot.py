@@ -23,8 +23,9 @@ def plot(x_array, y_array, labels, filename, multi=False):
     """ 
     # Some random colors 
     colors = ["black", "blue", "red", "orange", "green", "yellow", "pink", "purple"]
-    
+
     plt.figure(figsize=(10, 5))
+    plt.title(filename)
 
     if multi:
         for i in range(len(x_array)):
