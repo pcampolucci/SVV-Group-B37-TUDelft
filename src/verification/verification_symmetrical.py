@@ -8,9 +8,9 @@ Author: Casper Kanaar
 import numpy as np 
 from src.input.parameters_citation import *
 
-# =============================================================================
-# Function definitions 
 
+# =============================================================================
+# Function definitions
 def short_period_oscillation_a():
     A = 4*(muc**2)*KY2
     B = -2*muc*(KY2*CZa + Cmadot + Cmq)
@@ -23,6 +23,7 @@ def short_period_oscillation_a():
     
     return eigenvalue_short_period_oscillation_a_1,eigenvalue_short_period_oscillation_a_2
 
+
 def short_period_oscillation_b():
     A = 2*muc*KY2
     B = Cmadot + Cmq
@@ -34,6 +35,7 @@ def short_period_oscillation_b():
     print(f"Eigenvalues for simplified short period oscillation (V = constant, flight path angle = constant)(Case B): {eigenvalue_short_period_oscillation_b_1, eigenvalue_short_period_oscillation_b_2}")
     
     return eigenvalue_short_period_oscillation_b_1,eigenvalue_short_period_oscillation_b_2
+
 
 def phugoid_oscillation_a():
     A = -4*muc**2
@@ -51,7 +53,8 @@ def phugoid_oscillation_a():
     print(f"Damping coefficient, damping, and natural frequency for the simplified Phugoid oscillation (Angle of attack = constant, angular acceleration = constant)(Case A): {damping_coefficient,damping,natural_frequency}")
     
     return eigenvalue_phugoid_oscillation_a_1,eigenvalue_phugoid_oscillation_a_2,damping_coefficient,natural_frequency,damping
-    
+
+
 def phugoid_oscillation_b():
     A = 2*muc*(CZa*Cmq - 2*muc*Cma)
     B = 2*muc*(CXu*Cma - Cmu*CXa) + Cmq*(CZu*CXa - CXu*CZa)
@@ -68,15 +71,10 @@ def phugoid_oscillation_b():
     print(f"Damping coefficient, damping, and natural frequency for the simplified Phugoid oscillation (Angle of attack = constant, angular acceleration = 0)(Case B): {damping_coefficient,damping,natural_frequency}")
     
     return eigenvalue_phugoid_oscillation_b_1,eigenvalue_phugoid_oscillation_b_2,damping_coefficient,natural_frequency,damping
-    
+
+
 # Executing the functions 
 short_period_oscillation_a()
 short_period_oscillation_b()
 phugoid_oscillation_a()
 phugoid_oscillation_b()
-
-
-
-    
-    
-    

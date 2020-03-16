@@ -13,9 +13,8 @@ import numpy as np
 import math as m
 from src.input.parameters_citation import *
 
+
 # define class and functions
-
-
 def aperiodic_roll():
 
     # get eigenvalue from report simplification
