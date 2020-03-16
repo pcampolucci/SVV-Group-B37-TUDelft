@@ -10,7 +10,8 @@ from matplotlib import pyplot as plt
 import seaborn as sns 
 sns.set() 
 
-def plot(x_array,y_array,labels,filename):
+
+def plot(x_array, y_array, labels, filename, multi=False):
     """
     Inputs:
         - x_array: a two dimensional array containing the different x datasets
@@ -21,11 +22,16 @@ def plot(x_array,y_array,labels,filename):
         - A single plot which will be saved with dpi 250 
     """ 
     # Some random colors 
-    colors = ["black","blue","red","orange","green","yellow","pink","purple"]
+    colors = ["black", "blue", "red", "orange", "green", "yellow", "pink", "purple"]
     
-    plt.figure(figsize = (10,5))
-    for i in range(len(x_array)):
-        plt.plot(x_array[i],y_array[i], color = colors[i],label = labels[i])
-        
+    plt.figure(figsize=(10, 5))
+
+    if multi:
+        for i in range(len(x_array)):
+            plt.plot(x_array[i], y_array[i], color=colors[i], label=labels[i])
+
+    else:
+        plt.plot(x_array, y_array, color=colors[0], label=labels)
+
     plt.legend()
-    plt.savefig(filename, dpi = 250)
+    plt.savefig(filename, dpi=250)
