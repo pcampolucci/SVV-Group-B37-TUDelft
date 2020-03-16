@@ -1,12 +1,17 @@
 import control as c
-import maximo_pars as par
+import complete_par as par
 import numpy as np
 import matplotlib.pyplot as plt
 import response_flightest as data
 
 #check if the results make sense and if feedback is needed.
 
-case = 'a'+'symmetric'
+case = ''+'symmetric'
+start = 32500
+step = 150
+stop = start + step*10
+
+TAS = data.TAS
 if case == 'symmetric':
     C1 = np.matrix([[-2*par.muc*par.c/(par.V0**2), 0, 0, 0],
                     [0, (par.CZadot - 2*par.muc)*par.c/par.V0, 0, 0],
@@ -72,13 +77,10 @@ else:
 sys = c.ss(A,B,C,D)
 #########################################
 ############# DEFINE INPUTS
-start = 37070
-step = 18
-stop = start + step*10
 t = data.time[start:stop]
 if case == 'symmetric':
     elev_defs = data.delta_e*np.pi/180
-    elev_defs = elev_defs[start:stop]
+    elev_defs = elev_defs[start:stop] #- elev_defs[start]
 elif case == 'asymmetric':
     delta_a = data.delta_a*np.pi/180
     delta_r = data.delta_r*np.pi/180
@@ -104,19 +106,20 @@ roll = data.roll_angle
 
 sli = -1
 if case == 'symmetric':
-    sys_response[1][2][:sli] = sys_response[1][2][:sli]*180/np.pi + pitch_angle[start]
-    sys_response[1][3][:sli] = sys_response[1][3][:sli]*180/np.pi + pitchrate[start]
-    sys_response[1][1][:sli] = sys_response[1][1][:sli]*180/np.pi + AoAs[start]
+    sys_response[1][0][:] = sys_response[1][0][:] + TAS[start]
+    sys_response[1][2][:] = sys_response[1][2][:]*180/np.pi + pitch_angle[start]
+    sys_response[1][3][:] = sys_response[1][3][:]*180/np.pi + pitchrate[start]
+    sys_response[1][1][:] = sys_response[1][1][:]*180/np.pi + AoAs[start]
 elif case == 'asymmetric':
     # sys_response[1][2][:sli] = sys_response[1][2][:sli]*180/np.pi + pitch_angle[start]
     # sys_response[1][3][:sli] = sys_response[1][3][:sli]*180/np.pi + pitchrate[start]
     sys_response[1][2][:sli] = sys_response[1][2][:sli]*180/np.pi + roll[start]
-
+t = t-start/10 - 9
 ########################################################################
 ########################################################################
 ########### PLOT STUFF
-tableau20 = [(255, 87, 87), (137, 255, 87), (87, 255, 249), (0, 0, 0),
-             (255, 33, 33), (255, 192, 33), (244, 255, 33), (64, 255, 175),
+tableau20 = [(255, 87, 87), (237, 198, 0), (87, 255, 249), (0, 0, 0),
+             (255, 33, 33), (255, 192, 33), (0, 148, 247), (64, 255, 175),
              (225, 107, 255), (197, 176, 213), (140, 86, 75), (196, 156, 148),
              (227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),
              (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]
@@ -124,33 +127,88 @@ tableau20 = [(255, 87, 87), (137, 255, 87), (87, 255, 249), (0, 0, 0),
 for i in range(len(tableau20)):
     r, g, b = tableau20[i]
     tableau20[i] = (r / 255., g / 255., b / 255.)
-ax = plt.subplot(111)
-ax.spines["top"].set_visible(False)
-# ax.spines["bottom"].set_visible(False)
-ax.spines["right"].set_visible(False)
-# ax.spines["left"].set_visible(False)
-
-ax.get_xaxis().tick_bottom()
-ax.get_yaxis().tick_left()
-
 # Show the major grid lines with dark grey lines
-plt.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
-
-# Show the minor grid lines with very faint and almost transparent grey lines
-plt.minorticks_on()
-plt.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
-plt.rcParams.update({'font.size': 9})
-
-t = t-start/10 - 9
 
 
-# plt.plot(t[:sli], sys_response[1][0][:sli], label = 'Yaw angle sim [deg]', color = tableau20[8])
-# plt.plot(t[:sli], sys_response[1][3][:sli], label = 'Pitch rate sim [deg/s]', color = tableau20[5])
-plt.plot(t[:sli], sys_response[1][2][:sli], label = 'Roll angle sim [deg]', color = tableau20[1])
-# plt.plot(t[:], pitch_angle[start:stop], label = 'Pitch angle data [deg]', color = tableau20[3])
-# plt.plot(t[:], pitchrate[start:stop], label = 'Pitch rate data [deg/s]', color = tableau20[4])
-# plt.plot(t[:], AoAs[start:stop], label = 'Angle of attack data [deg]', color = tableau20[10])
-plt.plot(t[:], roll[start:stop], label = 'Roll angle data [deg]', color = tableau20[0])
-plt.legend()
-plt.savefig('Asymm.pdf', dpi = 1600)
+
+ax1 = plt.subplot(511)
+ax1.spines["top"].set_visible(False)
+ax1.spines["right"].set_visible(False)
+ax1.get_xaxis().tick_bottom()
+ax1.get_yaxis().tick_left()
+ax2 = plt.subplot(512)
+ax2.spines["top"].set_visible(False)
+ax2.spines["right"].set_visible(False)
+ax2.get_xaxis().tick_bottom()
+ax2.get_yaxis().tick_left()
+ax3 = plt.subplot(513)
+ax3.spines["top"].set_visible(False)
+ax3.spines["right"].set_visible(False)
+ax3.get_xaxis().tick_bottom()
+ax3.get_yaxis().tick_left()
+ax4 = plt.subplot(514)
+ax4.spines["top"].set_visible(False)
+ax4.spines["right"].set_visible(False)
+ax4.get_xaxis().tick_bottom()
+ax4.get_yaxis().tick_left()
+ax5 = plt.subplot(515)
+ax5.spines["top"].set_visible(False)
+ax5.spines["right"].set_visible(False)
+ax5.get_xaxis().tick_bottom()
+ax5.get_yaxis().tick_left()
+
+
+ax1.plot(t[:], elev_defs[:]*180/np.pi, color = tableau20[1])
+ax1.set(ylabel = r'$\delta_e$ [deg]')
+ax1.set_xlim(xmin=0,xmax=t[-1])
+ax2.plot(t[:], sys_response[1][0], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
+ax2.plot(t[:], TAS[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
+ax2.set(ylabel = r'$V_{TAS}$ [m/s]')
+ax2.set_xlim(xmin=0,xmax=t[-1])
+ax2.legend(loc = 'upper right')
+ax3.plot(t[:], sys_response[1][1], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
+ax3.plot(t[:], AoAs[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
+ax3.set(ylabel = r'$\alpha$ [deg]')
+ax3.set_xlim(xmin=0,xmax=t[-1])
+ax4.plot(t[:], sys_response[1][2], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
+ax4.plot(t[:], pitch_angle[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
+ax4.set(ylabel = r'$\theta$ [deg]')
+ax4.set_xlim(xmin=0,xmax=t[-1])
+ax5.plot(t[:], sys_response[1][3], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
+ax5.plot(t[:], pitchrate[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
+ax5.set(ylabel = r'q [deg/s]')
+ax5.set_xlim(xmin=0,xmax=t[-1])
+
+
+#############################################################################
+#############################################################################
+ax1.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+ax1.minorticks_on()
+ax1.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+ax2.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+ax2.minorticks_on()
+ax2.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+ax3.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+ax3.minorticks_on()
+ax3.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+ax4.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+ax4.minorticks_on()
+ax4.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+ax5.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+ax5.minorticks_on()
+ax5.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+
+
+
+
+# # plt.plot(t[:sli], sys_response[1][0][:sli], label = 'Yaw angle sim [deg]', color = tableau20[8])
+# # plt.plot(t[:sli], sys_response[1][3][:sli], label = 'Pitch rate sim [deg/s]', color = tableau20[5])
+# plt.plot(t[:sli], sys_response[1][2][:sli], label = 'Pitch angle sim [deg]', color = tableau20[2], marker = '2', markevery = 20)
+# # plt.plot(t[:], pitch_angle[start:stop], label = 'Pitch angle data [deg]', color = tableau20[3])
+# # plt.plot(t[:], pitchrate[start:stop], label = 'Pitch rate data [deg/s]', color = tableau20[4])
+# # plt.plot(t[:], AoAs[start:stop], label = 'Angle of attack data [deg]', color = tableau20[10])
+# plt.plot(t[:], pitch_angle[start:stop], label = 'Pitch angle data [deg]', color = tableau20[0])
+
+plt.xlabel('Time [s]')
+ax1.set_title('Phugoid motion', fontweight = 'bold')
 plt.show()
