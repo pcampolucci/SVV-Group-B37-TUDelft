@@ -7,8 +7,8 @@ import response_flightest as data
 #check if the results make sense and if feedback is needed.
 
 case = ''+'symmetric'
-start = 32500
-step = 150
+start = 30399   ### 32500 for Phugoid;
+step = 15
 stop = start + step*10
 
 TAS = data.TAS
@@ -68,10 +68,7 @@ elif case == 'asymmetric':
     D = np.matrix([[0, 0], [0, 0], [0, 0], [0, 0]])
 else:
     print('Case must be either symmetric or asymmetric')
-#define simulation time and time steps
-# print('1', C1)
-# print('2', C2)
-# print('3', C3)
+
 
 #create state space linear system and compute system response
 sys = c.ss(A,B,C,D)
@@ -104,16 +101,16 @@ AoAs = data.AoAs
 roll = data.roll_angle
 
 
-sli = -1
+
 if case == 'symmetric':
     sys_response[1][0][:] = sys_response[1][0][:] + TAS[start]
     sys_response[1][2][:] = sys_response[1][2][:]*180/np.pi + pitch_angle[start]
     sys_response[1][3][:] = sys_response[1][3][:]*180/np.pi + pitchrate[start]
     sys_response[1][1][:] = sys_response[1][1][:]*180/np.pi + AoAs[start]
 elif case == 'asymmetric':
-    # sys_response[1][2][:sli] = sys_response[1][2][:sli]*180/np.pi + pitch_angle[start]
-    # sys_response[1][3][:sli] = sys_response[1][3][:sli]*180/np.pi + pitchrate[start]
-    sys_response[1][2][:sli] = sys_response[1][2][:sli]*180/np.pi + roll[start]
+    # sys_response[1][2][:] = sys_response[1][2][:]*180/np.pi + pitch_angle[start]
+    # sys_response[1][3][:] = sys_response[1][3][:]*180/np.pi + pitchrate[start]
+    sys_response[1][2][:] = sys_response[1][2][:]*180/np.pi + roll[start]
 t = t-start/10 - 9
 ########################################################################
 ########################################################################
@@ -203,12 +200,12 @@ ax5.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
 
 # # plt.plot(t[:sli], sys_response[1][0][:sli], label = 'Yaw angle sim [deg]', color = tableau20[8])
 # # plt.plot(t[:sli], sys_response[1][3][:sli], label = 'Pitch rate sim [deg/s]', color = tableau20[5])
-# plt.plot(t[:sli], sys_response[1][2][:sli], label = 'Pitch angle sim [deg]', color = tableau20[2], marker = '2', markevery = 20)
+# # plt.plot(t[:sli], sys_response[1][2][:sli], label = 'Pitch angle sim [deg]', color = tableau20[2], marker = '2', markevery = 20)
 # # plt.plot(t[:], pitch_angle[start:stop], label = 'Pitch angle data [deg]', color = tableau20[3])
 # # plt.plot(t[:], pitchrate[start:stop], label = 'Pitch rate data [deg/s]', color = tableau20[4])
 # # plt.plot(t[:], AoAs[start:stop], label = 'Angle of attack data [deg]', color = tableau20[10])
-# plt.plot(t[:], pitch_angle[start:stop], label = 'Pitch angle data [deg]', color = tableau20[0])
+# # plt.plot(t[:], pitch_angle[start:stop], label = 'Pitch angle data [deg]', color = tableau20[0])
 
 plt.xlabel('Time [s]')
-ax1.set_title('Phugoid motion', fontweight = 'bold')
+ax1.set_title('Short period motion', fontweight = 'bold')
 plt.show()
