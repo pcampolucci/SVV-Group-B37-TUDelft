@@ -1,17 +1,25 @@
 # Citation 550 - Linear simulation
 import numpy as np
+import response_flightest as data
 
 
+start = 32500   ### 32500,150s for Phugoid; 30390, 14s for short period
+step = 150
 # Stationary flight condition
 
-hp0    =  1000     	      # pressure altitude in the stationary flight condition [m]
-V0     =  77      # true airspeed in the stationary flight condition [m/sec]
+hp0    =  data.pressalt[start]     	      # pressure altitude in the stationary flight condition [m]
+V0     =  data.TAS[start]      # true airspeed in the stationary flight condition [m/sec]
 alpha0 =  0.0          # angle of attack in the stationary flight condition [rad]
 th0    =  0          # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
-m      = 4000            # mass [kg] 4157.174
-
+cabin = 102+90+78+74+79+82+80+87+68
+fuel0 = 4100*0.453592
+fuelburned = np.cumsum(0.1*np.ones(data.FMF.shape[0])*data.FMF)
+fuel = fuel0 - fuelburned
+m      = 4157.174 + cabin + fuel           # mass [kg] 4157.174
+m      = m[start]
+print('m = ', m)
 # aerodynamic properties
 e      = 0.8         # Oswald factor [ ]
 CD0    = 0.04        # Zero lift drag coefficient [ ]
@@ -47,7 +55,7 @@ R      = 287.05          # specific gas constant [m^2/sec^2K]
 g      = 9.81            # [m/sec^2] (gravity constant)
 
 # air density [kg/m^3]  
-rho    = rho0 #* np.power( ((1+(lam * hp0 / Temp0))), (-((g / (lam*R)) + 1)))
+rho    = rho0 * np.power( ((1+(lam * hp0 / Temp0))), (-((g / (lam*R)) + 1)))
 # print(rho)
 # rho = 1.225
 W      = m * g            # [N]       (aircraft weight)

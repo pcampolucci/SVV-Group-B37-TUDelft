@@ -7,11 +7,20 @@ import response_flightest as data
 #check if the results make sense and if feedback is needed.
 
 case = ''+'symmetric'
-start = 30399   ### 32500 for Phugoid;
-step = 15
+start = par.start
+step = par.step
 stop = start + step*10
-
 TAS = data.TAS
+
+if case == 'symmetric':
+    elev_defs = data.delta_e*np.pi/180
+    elev_defs = elev_defs[start:stop] #- elev_defs[start]
+elif case == 'asymmetric':
+    delta_a = data.delta_a*np.pi/180
+    delta_r = data.delta_r*np.pi/180
+    inputs = np.vstack([delta_a, delta_r])
+    print(inputs.shape)
+    inputs = inputs[:,start:stop]
 if case == 'symmetric':
     C1 = np.matrix([[-2*par.muc*par.c/(par.V0**2), 0, 0, 0],
                     [0, (par.CZadot - 2*par.muc)*par.c/par.V0, 0, 0],
@@ -48,8 +57,7 @@ C1_inv = np.linalg.inv(C1)
 C2_inv = np.linalg.inv(C2)
 A = - np.matmul(C1_inv, C2)
 B = - np.matmul(C1_inv, C3)
-print(A)
-# B = 0*B     #uncommet to get stick fixed stability
+
 eigenvalues = np.linalg.eigvals(A)
 print('The eigenvalues are: ', eigenvalues)
 #outputs
@@ -75,16 +83,6 @@ sys = c.ss(A,B,C,D)
 #########################################
 ############# DEFINE INPUTS
 t = data.time[start:stop]
-if case == 'symmetric':
-    elev_defs = data.delta_e*np.pi/180
-    elev_defs = elev_defs[start:stop] #- elev_defs[start]
-elif case == 'asymmetric':
-    delta_a = data.delta_a*np.pi/180
-    delta_r = data.delta_r*np.pi/180
-    inputs = np.vstack([delta_a, delta_r])
-    print(inputs.shape)
-    inputs = inputs[:,start:stop]
-
 
 if case == 'symmetric':
     sys_response = c.forced_response(sys, t, elev_defs)
@@ -207,5 +205,5 @@ ax5.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
 # # plt.plot(t[:], pitch_angle[start:stop], label = 'Pitch angle data [deg]', color = tableau20[0])
 
 plt.xlabel('Time [s]')
-ax1.set_title('Short period motion', fontweight = 'bold')
+ax1.set_title('Short period motion, m = 6373 kg', fontweight = 'bold')
 plt.show()
