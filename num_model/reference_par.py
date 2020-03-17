@@ -3,7 +3,7 @@ import numpy as np
 import response_reference as data
 
 
-start = 36760   ### 32490,150s for Phugoid; 30390, 14s for short period; 34397, 15s for Dutch roll, 35210, 15s for Dutch roll YD
+start = 38900   ### 32490,150s for Phugoid; 30390, 14s for short period; 34397, 15s for Dutch roll, 35210, 15s for Dutch roll YD
 ################### 31605, 13.5s for aperiodic roll
 step = 140
 # Stationary flight condition
@@ -14,8 +14,8 @@ alpha0 =  0.0          # angle of attack in the stationary flight condition [rad
 th0    =  0          # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
-cabin = 102+90+78+74+79+82+80+87+68
-fuel0 = 4100*0.453592
+cabin = 95+92+74+66+61+75+78+86+68
+fuel0 = 4050*0.453592
 fuelburned = np.cumsum(0.1*np.ones(data.FMF.shape[0])*data.FMF)
 fuel = fuel0 - fuelburned
 m      = 4157.174 + cabin + fuel           # mass [kg] 4157.174

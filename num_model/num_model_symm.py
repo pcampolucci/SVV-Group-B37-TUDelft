@@ -1,8 +1,8 @@
 import control as c
-import complete_par as par
+import reference_par as par
 import numpy as np
 import matplotlib.pyplot as plt
-import response_flightest as data
+import response_reference as data
 
 #check if the results make sense and if feedback is needed.
 
@@ -44,7 +44,7 @@ elif case == 'asymmetric':
                     [0, 0, par.b/(2*par.V0), 0],
                     [par.Clb, 0, par.Clp * (par.b) / (2 * par.V0), par.Clr * (par.b) / (2 * par.V0)],
                     [par.Cnb, 0, par.Cnp * (par.b) / (2 * par.V0), par.Cnr * (par.b) / (2 * par.V0)]])
-    C3 = - np.matrix([[par.CYda, par.CYdr],
+    C3 = np.matrix([[par.CYda, par.CYdr],
                     [0, 0],
                     [par.Clda, par.Cldr],
                     [par.Cnda, par.Cndr]])
