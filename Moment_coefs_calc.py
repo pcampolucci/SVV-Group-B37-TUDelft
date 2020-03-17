@@ -11,11 +11,12 @@ VEAS      =  measurement_shift.VEASs[0]    # [m/s]
 #first measurement
 de1 = measurement_shift.des[0]
 t1  = measurement_shift.timestamps[0]
+
 #second measurement
 de2 = measurement_shift.des[1]
 t2  = measurement_shift.timestamps[1]
 
-print("de1 de2", measurement_shift.des)
+print("de1 de2", measurement_shift.des, de1, de2)
 dde = (de2-de1)*2*np.pi/360
 
 update_fuel_balance(t1)
@@ -25,11 +26,13 @@ components[moved_pax].xcg_ = inches_to_m(moved_to)
 update_fuel_balance(t2)
 xcg2 = components['TM'].xcg()
 
+
+
 dxcg = xcg2-xcg1
 print("dxcg:",xcg1,xcg2)
 W = components['TM'].weight()
 
-CN = W/(1/2*rho_0*VEAS**2*S)
+CN = W/(1/2*measurement_shift.rhos[0]*measurement_shift.VTASs[0]**2*S)
 Cmd = -1/dde * CN * dxcg / c
 
 print("Cn is: ", CN)

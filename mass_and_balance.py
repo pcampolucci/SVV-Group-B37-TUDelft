@@ -8,7 +8,7 @@ from scipy import integrate
 from flight_data import *
 
 
-FW = 4100      # [lbs]
+FW = 4050      # [lbs]
 
 
 
@@ -65,19 +65,46 @@ class Group:
     def weight(self):
         return self.mass()*9.807
 
+""" From: Table E.2. Citation II fuel moments with respect to the datum line """
+
+fuel_loads = pounds_to_kg( np.array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200,
+                        1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400,
+                        2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600,
+                        3700, 3800, 3900, 4000, 4100, 4200, 4300, 4400]))
+
+fuel_moments = lbsinch_to_kgm(np.array([298.16, 591.18, 879.08, 1165.42, 1448.40, 1732.53, 2014.80, 2298.84, 2581.92, 2866.30, 3150.18, 3434.52,
+                         3718.52, 4003.23, 4287.76, 4572.24, 4856.56, 5141.16, 5425.64, 5709.90, 5994.04, 6278.47, 6562.82, 6846.96,
+                         7131.00, 7415.33, 7699.60, 7984.34, 8269.06, 8554.05, 8839.04, 9124.80, 9410.62, 9696.97, 9983.40, 10270.08,
+                         10556.84, 10843.87, 11131.00, 11418.20, 11705.50, 11993.31, 12281.18, 12569.04]))*100
+
+fuel_xcgs = fuel_moments/fuel_loads
+
 
 components = {}
 
-""" Seats """
-components['Seat 1'] = Component(inches_to_m(131), 102)
+# """ Seats Our Data """
+# components['Seat 1'] = Component(inches_to_m(131), 102)
+# components['Seat 2'] = Component(inches_to_m(131), 0)
+# components['Seat 3'] = Component(inches_to_m(214), 74)
+# components['Seat 4'] = Component(inches_to_m(214), 79)
+# components['Seat 5'] = Component(inches_to_m(251), 82)
+# components['Seat 6'] = Component(inches_to_m(251), 80)
+# components['Seat 7'] = Component(inches_to_m(288), 87)
+# components['Seat 8'] = Component(inches_to_m(288), 68)
+# components['Seat 10'] = Component(inches_to_m(170), 78)
+
+
+""" Seats Reference Data"""
+components['Seat 1'] = Component(inches_to_m(131), 95)
 components['Seat 2'] = Component(inches_to_m(131), 92)
 components['Seat 3'] = Component(inches_to_m(214), 74)
-components['Seat 4'] = Component(inches_to_m(214), 79)
-components['Seat 5'] = Component(inches_to_m(251), 82)
-components['Seat 6'] = Component(inches_to_m(251), 80)
-components['Seat 7'] = Component(inches_to_m(288), 87)
-components['Seat 8'] = Component(inches_to_m(288), 68)
-components['Seat 10'] = Component(inches_to_m(170), 78)
+components['Seat 4'] = Component(inches_to_m(214), 66)
+components['Seat 5'] = Component(inches_to_m(251), 61)
+components['Seat 6'] = Component(inches_to_m(251), 75)
+components['Seat 7'] = Component(inches_to_m(288), 78)
+components['Seat 8'] = Component(inches_to_m(288), 86)
+components['Seat 10'] = Component(inches_to_m(170), 68)
+
 
 """ Baggage """
 components['Nose'] = Component(inches_to_m(131), pounds_to_kg(0))
@@ -96,10 +123,12 @@ components['BEM'] = Component(inches_to_m(291.65), pounds_to_kg(9165))
 components['ZFM'] = Group([components['BEM'],components['Payload']])
 
 """ Fuel Load """
-components['FL'] = Component(inches_to_m(287.58), pounds_to_kg(4050))
+components['FL'] = Component(np.interp(pounds_to_kg(FW), fuel_xcgs, fuel_loads), pounds_to_kg(FW))
 
 """ Total Mass """
 components['TM'] = Group([components['ZFM'], components['FL']])
+
+print(components['TM'].mass())
 
 """
 components[name].mass() to get mass     [kg]
@@ -109,19 +138,6 @@ components[name].xcg() to get xcg       [m]
 """
 
 
-""" From: Table E.2. Citation II fuel moments with respect to the datum line """
-
-fuel_loads = pounds_to_kg( np.array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200,
-                        1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400,
-                        2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600,
-                        3700, 3800, 3900, 4000, 4100, 4200, 4300, 4400]))
-
-fuel_moments = lbsinch_to_kgm(np.array([298.16, 591.18, 879.08, 1165.42, 1448.40, 1732.53, 2014.80, 2298.84, 2581.92, 2866.30, 3150.18, 3434.52,
-                         3718.52, 4003.23, 4287.76, 4572.24, 4856.56, 5141.16, 5425.64, 5709.90, 5994.04, 6278.47, 6562.82, 6846.96,
-                         7131.00, 7415.33, 7699.60, 7984.34, 8269.06, 8554.05, 8839.04, 9124.80, 9410.62, 9696.97, 9983.40, 10270.08,
-                         10556.84, 10843.87, 11131.00, 11418.20, 11705.50, 11993.31, 12281.18, 12569.04]))*100
-
-fuel_xcgs = fuel_moments/fuel_loads
 
 
 """ Import data from matlab """

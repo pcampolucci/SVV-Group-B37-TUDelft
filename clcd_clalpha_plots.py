@@ -30,6 +30,13 @@ print('CLa: ', CLa, 'CL0: ', CL0)
 A = np.vstack([CLs**2, np.ones(len(CLs))]).T
 slope, CD0 = np.linalg.lstsq(A, CDs, rcond=None)[0]
 e = 1/slope/(b/c)/np.pi
+
+print('VTAS', measurement_1.VTASs)
+print('rhos', measurement_1.rhos)
+print('T', measurement_1.Ts)
+print('Tm', measurement_1.Tms)
+print('ps', measurement_1.ps)
+
 print('CD0: ', CD0, 'Oswald: ', e)
 
 alpha_ = np.linspace(-5, 15, 100)
