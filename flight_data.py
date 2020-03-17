@@ -6,6 +6,7 @@ gamma = 1.4
 p_0 = 101325
 rho_0 =  1.225
 T_0 = 288.15
+mu = 1.7E-5 # Dynamic viscosity for T = -10 to -5 deg
 
 g = 9.80665
 R = 287

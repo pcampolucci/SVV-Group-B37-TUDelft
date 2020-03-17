@@ -10,10 +10,12 @@ thrusts_m3s = np.loadtxt('measurement_3s_thrust.dat')
 thrusts_m3 = thrusts_m3[:,0] + thrusts_m3[:, 1]
 thrusts_m3s = thrusts_m3s[:,0] + thrusts_m3s[:, 1]
 
+print(thrusts_m3, thrusts_m3s)
 """ Determine Thrust Coefficient and Standard Thrust Coefficient """
 CTs_m3 = thrusts_m3/(0.5*measurement_3s.rhos*measurement_3s.VTASs**2*D**2)
+print(CTs_m3)
 CTs_m3s = thrusts_m3s/(0.5*measurement_3s.rhos*measurement_3s.VTASs**2*D**2)
-
+print(CTs_m3s)
 def_star = measurement_3.des - 1/Cmd*CmTc*(CTs_m3s - CTs_m3)        # Reduced Deflection
 
 W = []

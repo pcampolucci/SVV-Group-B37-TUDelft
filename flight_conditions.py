@@ -2,6 +2,7 @@ from flight_data import *
 
 measurements = [measurement_1, measurement_3, measurement_3s]
 
+
 """ Determine Flight Conditions for each flight dataset """
 
 for m in measurements:
@@ -13,6 +14,14 @@ for m in measurements:
     m.TISAs = T_0 + Tgrad * m.hps                                    # ISA Temperature
     m.dTs = m.Ts-m.TISAs                                             # T-Tisa
     m.VEASs = m.VTASs * np.sqrt(m.rhos / rho_0)                      # Equivalent Airspeed
+    m.Res = m.rhos*m.VTASs*c/mu
+    print('---------------')
+    print('Mach Number Range: ', np.min(m.Ms), np.max(m.Ms))
+    print('Reynolds Number Range: ', np.min(m.Res), np.max(m.Res))
+
+
+
+
 
 thrust_input_m1 = np.array([measurement_1.hps, measurement_1.Ms, measurement_1.dTs, measurement_1.FFls, measurement_1.FFrs]).T
 thrust_input_m3 = np.array([measurement_3.hps, measurement_3.Ms, measurement_3.dTs, measurement_3.FFls, measurement_3.FFrs]).T
