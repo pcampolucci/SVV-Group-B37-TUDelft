@@ -5,9 +5,9 @@ import scipy.io
 ############## Grab data ####################
 data = scipy.io.loadmat('FTISxprt-20200309_flight1.mat')
 flightdata = data['flightdata']
-plotting = 'off'
-start = 30380 #s/10
-step = 45 #s
+plotting = 'on'
+start = 36810 #s/10
+step = 200 #s
 stop = start + step * 10 #s/10
 
 AoAs = flightdata[0][0][0][0][0][0][:,0]
@@ -60,8 +60,8 @@ if plotting == 'on':
 
     # plt.plot(time[start:stop], pitch_angle[start:stop], label = 'Pitch angle [deg]')
     # plt.plot(time[start:stop], pitchrate[start:stop], label = 'Pitch rate [deg]')
-    # plt.plot(time[start:stop] - start / 10 - 9, TAS[start:stop], label='Elevator deflection [deg]')
-    plt.plot(time[start:stop] - start / 10 - 9, delta_e[start:stop], label='Elevator deflection [deg]')
+    plt.plot(time[start:stop] - start / 10 - 9, delta_a[start:stop], label='Aileron deflection [deg]')
+    plt.plot(time[start:stop] - start / 10 - 9, delta_r[start:stop], label='Rudder deflection [deg]')
     plt.legend()
     plt.show()
 elif plotting == 'off':

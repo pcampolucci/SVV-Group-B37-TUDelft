@@ -6,7 +6,7 @@ import response_flightest as data
 
 #check if the results make sense and if feedback is needed.
 
-case = ''+'symmetric'
+case = 'a'+'symmetric'
 start = par.start
 step = par.step
 stop = start + step*10
@@ -14,12 +14,11 @@ TAS = data.TAS
 
 if case == 'symmetric':
     elev_defs = data.delta_e*np.pi/180
-    elev_defs = elev_defs[start:stop] #- elev_defs[start]
+    elev_defs = elev_defs[start:stop] + 0.006609799562442952 #normalise elevator input
 elif case == 'asymmetric':
-    delta_a = data.delta_a*np.pi/180
-    delta_r = data.delta_r*np.pi/180
+    delta_a = data.delta_a*np.pi/180 - 0.005479673656854227 ## normalise aileron input
+    delta_r = data.delta_r*np.pi/180 + 0.006386078365702277 ## normalise rudder input
     inputs = np.vstack([delta_a, delta_r])
-    print(inputs.shape)
     inputs = inputs[:,start:stop]
 if case == 'symmetric':
     C1 = np.matrix([[-2*par.muc*par.c/(par.V0**2), 0, 0, 0],
@@ -45,7 +44,7 @@ elif case == 'asymmetric':
                     [0, 0, par.b/(2*par.V0), 0],
                     [par.Clb, 0, par.Clp * (par.b) / (2 * par.V0), par.Clr * (par.b) / (2 * par.V0)],
                     [par.Cnb, 0, par.Cnp * (par.b) / (2 * par.V0), par.Cnr * (par.b) / (2 * par.V0)]])
-    C3 = np.matrix([[par.CYda, par.CYdr],
+    C3 = - np.matrix([[par.CYda, par.CYdr],
                     [0, 0],
                     [par.Clda, par.Cldr],
                     [par.Cnda, par.Cndr]])
@@ -96,7 +95,9 @@ elif case == 'asymmetric':
 pitch_angle = data.pitch_angle
 pitchrate = data.pitchrate
 AoAs = data.AoAs
-roll = data.roll_angle
+roll_angle = data.roll_angle
+roll_rate = data.rollrate
+yaw_rate = data.yawrate
 
 
 
@@ -106,9 +107,9 @@ if case == 'symmetric':
     sys_response[1][3][:] = sys_response[1][3][:]*180/np.pi + pitchrate[start]
     sys_response[1][1][:] = sys_response[1][1][:]*180/np.pi + AoAs[start]
 elif case == 'asymmetric':
-    # sys_response[1][2][:] = sys_response[1][2][:]*180/np.pi + pitch_angle[start]
-    # sys_response[1][3][:] = sys_response[1][3][:]*180/np.pi + pitchrate[start]
-    sys_response[1][2][:] = sys_response[1][2][:]*180/np.pi + roll[start]
+    sys_response[1][1][:] = sys_response[1][1][:]*180/np.pi + roll_angle[start]
+    sys_response[1][2][:] = sys_response[1][2][:]*180/np.pi + roll_rate[start]
+    sys_response[1][3][:] = sys_response[1][3][:]*180/np.pi + yaw_rate[start]
 t = t-start/10 - 9
 ########################################################################
 ########################################################################
@@ -125,73 +126,149 @@ for i in range(len(tableau20)):
 # Show the major grid lines with dark grey lines
 
 
-
-ax1 = plt.subplot(511)
-ax1.spines["top"].set_visible(False)
-ax1.spines["right"].set_visible(False)
-ax1.get_xaxis().tick_bottom()
-ax1.get_yaxis().tick_left()
-ax2 = plt.subplot(512)
-ax2.spines["top"].set_visible(False)
-ax2.spines["right"].set_visible(False)
-ax2.get_xaxis().tick_bottom()
-ax2.get_yaxis().tick_left()
-ax3 = plt.subplot(513)
-ax3.spines["top"].set_visible(False)
-ax3.spines["right"].set_visible(False)
-ax3.get_xaxis().tick_bottom()
-ax3.get_yaxis().tick_left()
-ax4 = plt.subplot(514)
-ax4.spines["top"].set_visible(False)
-ax4.spines["right"].set_visible(False)
-ax4.get_xaxis().tick_bottom()
-ax4.get_yaxis().tick_left()
-ax5 = plt.subplot(515)
-ax5.spines["top"].set_visible(False)
-ax5.spines["right"].set_visible(False)
-ax5.get_xaxis().tick_bottom()
-ax5.get_yaxis().tick_left()
-
-
-ax1.plot(t[:], elev_defs[:]*180/np.pi, color = tableau20[1])
-ax1.set(ylabel = r'$\delta_e$ [deg]')
-ax1.set_xlim(xmin=0,xmax=t[-1])
-ax2.plot(t[:], sys_response[1][0], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
-ax2.plot(t[:], TAS[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
-ax2.set(ylabel = r'$V_{TAS}$ [m/s]')
-ax2.set_xlim(xmin=0,xmax=t[-1])
-ax2.legend(loc = 'upper right')
-ax3.plot(t[:], sys_response[1][1], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
-ax3.plot(t[:], AoAs[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
-ax3.set(ylabel = r'$\alpha$ [deg]')
-ax3.set_xlim(xmin=0,xmax=t[-1])
-ax4.plot(t[:], sys_response[1][2], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
-ax4.plot(t[:], pitch_angle[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
-ax4.set(ylabel = r'$\theta$ [deg]')
-ax4.set_xlim(xmin=0,xmax=t[-1])
-ax5.plot(t[:], sys_response[1][3], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
-ax5.plot(t[:], pitchrate[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
-ax5.set(ylabel = r'q [deg/s]')
-ax5.set_xlim(xmin=0,xmax=t[-1])
+if case == 'symmetric':
+    ax1 = plt.subplot(511)
+    ax1.spines["top"].set_visible(False)
+    ax1.spines["right"].set_visible(False)
+    ax1.get_xaxis().tick_bottom()
+    ax1.get_yaxis().tick_left()
+    ax2 = plt.subplot(512)
+    ax2.spines["top"].set_visible(False)
+    ax2.spines["right"].set_visible(False)
+    ax2.get_xaxis().tick_bottom()
+    ax2.get_yaxis().tick_left()
+    ax3 = plt.subplot(513)
+    ax3.spines["top"].set_visible(False)
+    ax3.spines["right"].set_visible(False)
+    ax3.get_xaxis().tick_bottom()
+    ax3.get_yaxis().tick_left()
+    ax4 = plt.subplot(514)
+    ax4.spines["top"].set_visible(False)
+    ax4.spines["right"].set_visible(False)
+    ax4.get_xaxis().tick_bottom()
+    ax4.get_yaxis().tick_left()
+    ax5 = plt.subplot(515)
+    ax5.spines["top"].set_visible(False)
+    ax5.spines["right"].set_visible(False)
+    ax5.get_xaxis().tick_bottom()
+    ax5.get_yaxis().tick_left()
 
 
-#############################################################################
-#############################################################################
-ax1.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
-ax1.minorticks_on()
-ax1.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
-ax2.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
-ax2.minorticks_on()
-ax2.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
-ax3.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
-ax3.minorticks_on()
-ax3.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
-ax4.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
-ax4.minorticks_on()
-ax4.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
-ax5.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
-ax5.minorticks_on()
-ax5.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+    ax1.plot(t[:], elev_defs[:]*180/np.pi, color = tableau20[1])
+    ax1.set(ylabel = r'$\delta_e$ [deg]')
+    ax1.set_xlim(xmin=0,xmax=t[-1])
+
+    ax2.plot(t[:], sys_response[1][0], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
+    ax2.plot(t[:], TAS[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
+    ax2.set(ylabel = r'$V_{TAS}$ [m/s]')
+    ax2.set_xlim(xmin=0,xmax=t[-1])
+    ax2.legend(loc = 'upper right')
+
+    ax3.plot(t[:], sys_response[1][1], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
+    ax3.plot(t[:], AoAs[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
+    ax3.set(ylabel = r'$\alpha$ [deg]')
+    ax3.set_xlim(xmin=0,xmax=t[-1])
+
+    ax4.plot(t[:], sys_response[1][2], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
+    ax4.plot(t[:], pitch_angle[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
+    ax4.set(ylabel = r'$\theta$ [deg]')
+    ax4.set_xlim(xmin=0,xmax=t[-1])
+
+    ax5.plot(t[:], sys_response[1][3], label = 'Simulated response', color = tableau20[4], marker = '1', markevery = 20)
+    ax5.plot(t[:], pitchrate[start:stop], label = 'Measured response', color = tableau20[6], marker = '2', markevery = 20)
+    ax5.set(ylabel = r'q [deg/s]')
+    ax5.set_xlim(xmin=0,xmax=t[-1])
+
+
+    #############################################################################
+    #############################################################################
+    ax1.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+    ax1.minorticks_on()
+    ax1.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+    ax2.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+    ax2.minorticks_on()
+    ax2.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+    ax3.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+    ax3.minorticks_on()
+    ax3.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+    ax4.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+    ax4.minorticks_on()
+    ax4.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+    ax5.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+    ax5.minorticks_on()
+    ax5.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+elif case == 'asymmetric':
+    ax1 = plt.subplot(511)
+    ax1.spines["top"].set_visible(False)
+    ax1.spines["right"].set_visible(False)
+    ax1.get_xaxis().tick_bottom()
+    ax1.get_yaxis().tick_left()
+    ax2 = plt.subplot(512)
+    ax2.spines["top"].set_visible(False)
+    ax2.spines["right"].set_visible(False)
+    ax2.get_xaxis().tick_bottom()
+    ax2.get_yaxis().tick_left()
+    ax3 = plt.subplot(513)
+    ax3.spines["top"].set_visible(False)
+    ax3.spines["right"].set_visible(False)
+    ax3.get_xaxis().tick_bottom()
+    ax3.get_yaxis().tick_left()
+    ax4 = plt.subplot(514)
+    ax4.spines["top"].set_visible(False)
+    ax4.spines["right"].set_visible(False)
+    ax4.get_xaxis().tick_bottom()
+    ax4.get_yaxis().tick_left()
+    ax5 = plt.subplot(515)
+    ax5.spines["top"].set_visible(False)
+    ax5.spines["right"].set_visible(False)
+    ax5.get_xaxis().tick_bottom()
+    ax5.get_yaxis().tick_left()
+
+    ax1.plot(t[:], delta_a[start:stop] * 180 / np.pi, color=tableau20[1])
+    ax1.set(ylabel=r'$\delta_a$ [deg]')
+    ax1.set_xlim(xmin=0, xmax=t[-1])
+
+    ax2.plot(t[:], delta_r[start:stop] * 180 / np.pi, color=tableau20[1])
+    ax2.set(ylabel=r'$\delta_r$ [deg]')
+    ax2.set_xlim(xmin=0, xmax=t[-1])
+
+
+    ax3.plot(t[:], sys_response[1][1], label='Simulated response', color=tableau20[4], marker='1', markevery=20)
+    ax3.plot(t[:], roll_angle[start:stop], label='Measured response', color=tableau20[6], marker='2', markevery=20)
+    ax3.set(ylabel=r'$\phi$ [deg]')
+    ax3.set_xlim(xmin=0, xmax=t[-1])
+    ax3.legend(loc='upper right')
+
+    ax4.plot(t[:], sys_response[1][2], label='Simulated response', color=tableau20[4], marker='1', markevery=20)
+    ax4.plot(t[:], roll_rate[start:stop], label='Measured response', color=tableau20[6], marker='2', markevery=20)
+    ax4.set(ylabel=r'$p$ [deg/s]')
+    ax4.set_xlim(xmin=0, xmax=t[-1])
+
+    ax5.plot(t[:], sys_response[1][3], label='Simulated response', color=tableau20[4], marker='1', markevery=20)
+    ax5.plot(t[:], yaw_rate[start:stop], label='Measured response', color=tableau20[6], marker='2', markevery=20)
+    ax5.set(ylabel=r'$r$ [deg/s]')
+    ax5.set_xlim(xmin=0, xmax=t[-1])
+
+    #############################################################################
+    #############################################################################
+    ax1.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+    ax1.minorticks_on()
+    ax1.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+    ax2.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+    ax2.minorticks_on()
+    ax2.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+    ax3.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+    ax3.minorticks_on()
+    ax3.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+    ax4.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+    ax4.minorticks_on()
+    ax4.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+    ax5.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+    ax5.minorticks_on()
+    ax5.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
+else:
+    print('Case should be either symmetric or asymmetric')
+
 
 
 
@@ -205,5 +282,5 @@ ax5.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.1)
 # # plt.plot(t[:], pitch_angle[start:stop], label = 'Pitch angle data [deg]', color = tableau20[0])
 
 plt.xlabel('Time [s]')
-ax1.set_title('Short period motion, m = 6373 kg', fontweight = 'bold')
+ax1.set_title('Aperiodic roll motion, m = 6360 kg', fontweight = 'bold')
 plt.show()

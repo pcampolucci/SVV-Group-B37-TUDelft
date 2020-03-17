@@ -3,8 +3,9 @@ import numpy as np
 import response_flightest as data
 
 
-start = 32500   ### 32500,150s for Phugoid; 30390, 14s for short period
-step = 150
+start = 38160   ### 32490,150s for Phugoid; 30390, 14s for short period; 34397, 15s for Dutch roll, 35210, 15s for Dutch roll YD
+################### 31605, 13.5s for aperiodic roll
+step = 200
 # Stationary flight condition
 
 hp0    =  data.pressalt[start]     	      # pressure altitude in the stationary flight condition [m]
