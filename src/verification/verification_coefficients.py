@@ -6,7 +6,7 @@ Author: Pietro Campolucci
 
 # importing packages
 from src.helpers.plot import plot
-from src.parameters_calculation.clcd_clalpha_plots import CLa, CLs, alpha_, CLs_, CDs, CDs_
+from src.parameters_calculation.clcd_clalpha_plots import CLa, alpha_, CLs_, CDs_
 from src.parameters_calculation.Moment_coefs_calc import Cma, measurement_3
 import statsmodels.api as sm
 import math
@@ -62,13 +62,16 @@ def plot_simulation(filename, mach):
     alpha_lst, CL_lst, CD_lst, Cm_lst, names = open_simulation(filename, mach)
 
     # plot CL-a
-    plot([alpha_lst, alpha_], [CL_lst, CLs_], ["XFLR5", "Numerical Model"], "verification/CL - a", multi=True)
+    plot([alpha_lst, alpha_], [CL_lst, CLs_], ["XFLR5", "Numerical Model"],
+         "CL - a", ["alpha [deg]", "CL"], "verification/CL - a", multi=True)
 
     # plot CL-CD
-    plot([-np.array(CD_lst), CDs_], [CL_lst, CLs_], ["XFLR5", "Numerical Model"], "verification/CL - CD", multi=True)
+    plot([np.array(CD_lst), CDs_], [CL_lst, CLs_], ["XFLR5", "Numerical Model"],
+         "CL - CD", ["CD", "CL"], "verification/CL - CD", multi=True)
 
     # plot Cm-a
-    plot([alpha_lst, measurement_3.alphas], [Cm_lst, measurement_3.des], ["XFLR5", "Numerical Model"], "verification/Cm - a", multi=True)
+    plot([alpha_lst, measurement_3.alphas], [Cm_lst, measurement_3.des], ["XFLR5", "Numerical Model"],
+         "Cm - a", ["alpha [deg]", "Cm"],  "verification/Cm - a", multi=True)
 
     # get slopes and regression
     cla = sm.OLS(CL_lst, alpha_lst).fit().params

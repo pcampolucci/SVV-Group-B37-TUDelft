@@ -11,7 +11,7 @@ import seaborn as sns
 sns.set() 
 
 
-def plot(x_array, y_array, labels, filename, multi=False):
+def plot(x_array, y_array, labels, title, axis, filename, multi=False):
     """
     Inputs:
         - x_array: a two dimensional array containing the different x datasets
@@ -25,14 +25,18 @@ def plot(x_array, y_array, labels, filename, multi=False):
     colors = ["black", "blue", "red", "orange", "green", "yellow", "pink", "purple"]
 
     plt.figure(figsize=(10, 5))
-    plt.title(filename)
+    plt.title(title)
 
     if multi:
+
         for i in range(len(x_array)):
-            plt.plot(x_array[i], y_array[i], color=colors[i], label=labels[i])
+            with sns.color_palette("rocket_r", len(x_array)):
+                plt.plot(np.array(x_array[i]), np.array(y_array[i]), label=labels[i])
 
     else:
         plt.plot(x_array, y_array, color=colors[0], label=labels)
 
+    plt.xlabel(axis[0])
+    plt.ylabel(axis[1])
     plt.legend()
     plt.savefig(filename, dpi=250)
