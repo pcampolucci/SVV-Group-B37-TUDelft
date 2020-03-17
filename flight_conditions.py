@@ -1,6 +1,6 @@
 from flight_data import *
 
-measurements = [measurement_1, measurement_3, measurement_3s]
+measurements = [measurement_1, measurement_3, measurement_3s, measurement_shift]
 
 
 """ Determine Flight Conditions for each flight dataset """
@@ -26,9 +26,13 @@ for m in measurements:
 thrust_input_m1 = np.array([measurement_1.hps, measurement_1.Ms, measurement_1.dTs, measurement_1.FFls, measurement_1.FFrs]).T
 thrust_input_m3 = np.array([measurement_3.hps, measurement_3.Ms, measurement_3.dTs, measurement_3.FFls, measurement_3.FFrs]).T
 thrust_input_m3s = np.array([measurement_3s.hps, measurement_3s.Ms, measurement_3s.dTs, measurement_3s.FFls, measurement_3s.FFrs]).T
+thrust_input_shift = np.array([measurement_shift.hps, measurement_shift.Ms, measurement_shift.dTs, measurement_shift.FFls, measurement_shift.FFrs]).T
 
 np.savetxt("matlab_m1.dat", thrust_input_m1, delimiter=" ")
 np.savetxt("matlab_m3.dat", thrust_input_m3, delimiter=" ")
 np.savetxt("matlab_m3s.dat", thrust_input_m3s, delimiter=" ")
+
+
+print(measurement_1.Ts)
 
 

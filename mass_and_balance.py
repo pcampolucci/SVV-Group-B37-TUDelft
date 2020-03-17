@@ -2,10 +2,13 @@
 import numpy as np
 import scipy.io as sio
 from conversions import *
+import matplotlib.pyplot as plt
+
 from scipy import integrate
+from flight_data import *
 
 
-FW = 4050      # [lbs]
+FW = 4100      # [lbs]
 
 
 
@@ -66,15 +69,15 @@ class Group:
 components = {}
 
 """ Seats """
-components['Seat 1'] = Component(inches_to_m(131), 95)
+components['Seat 1'] = Component(inches_to_m(131), 102)
 components['Seat 2'] = Component(inches_to_m(131), 92)
 components['Seat 3'] = Component(inches_to_m(214), 74)
-components['Seat 4'] = Component(inches_to_m(214), 66)
-components['Seat 5'] = Component(inches_to_m(251), 61)
-components['Seat 6'] = Component(inches_to_m(251), 75)
-components['Seat 7'] = Component(inches_to_m(288), 78)
-components['Seat 8'] = Component(inches_to_m(288), 86)
-components['Seat 10'] = Component(inches_to_m(170), 68)
+components['Seat 4'] = Component(inches_to_m(214), 79)
+components['Seat 5'] = Component(inches_to_m(251), 82)
+components['Seat 6'] = Component(inches_to_m(251), 80)
+components['Seat 7'] = Component(inches_to_m(288), 87)
+components['Seat 8'] = Component(inches_to_m(288), 68)
+components['Seat 10'] = Component(inches_to_m(170), 78)
 
 """ Baggage """
 components['Nose'] = Component(inches_to_m(131), pounds_to_kg(0))
@@ -122,30 +125,38 @@ fuel_xcgs = fuel_moments/fuel_loads
 
 
 """ Import data from matlab """
-matlab_data = sio.loadmat('matlab.mat')
-fuel_flow_left  = np.array(matlab_data['flightdata']['lh_engine_FMF'][0][0][0][0][0]).reshape(48321)*lbshr_to_kgsec(1)
-fuel_flow_right = np.array(matlab_data['flightdata']['rh_engine_FMF'][0][0][0][0][0]).reshape(48321)*lbshr_to_kgsec(1)
-fuel_out_left = np.array(matlab_data['flightdata']['rh_engine_FU'][0][0][0][0][0]).reshape(48321)*pounds_to_kg(1)
-fuel_out_right = np.array(matlab_data['flightdata']['rh_engine_FU'][0][0][0][0][0]).reshape(48321)*pounds_to_kg(1)
+matlab_data = sio.loadmat('FTISxprt-20200309_flight1.mat')
+size = len(np.array(matlab_data['flightdata']['lh_engine_FMF'][0][0][0][0][0]))
+fuel_flow_left  = np.array(matlab_data['flightdata']['lh_engine_FMF'][0][0][0][0][0]).reshape(size)*lbshr_to_kgsec(1)
+fuel_flow_right = np.array(matlab_data['flightdata']['rh_engine_FMF'][0][0][0][0][0]).reshape(size)*lbshr_to_kgsec(1)
+fuel_out_left = np.array(matlab_data['flightdata']['rh_engine_FU'][0][0][0][0][0]).reshape(size)*pounds_to_kg(1)
+fuel_out_right = np.array(matlab_data['flightdata']['rh_engine_FU'][0][0][0][0][0]).reshape(size)*pounds_to_kg(1)
 # fuel_out = np.array([0.]+ list(integrate.cumtrapz(fuel_flow_left+fuel_flow_right, time))) # To verify
 fuel_out = fuel_out_right + fuel_out_left                                               # Fuel burnt along time [kg]
 fuel_mass = pounds_to_kg(FW)-fuel_out                                                 # Fuel Mass along time  [kg]
 time = np.array(matlab_data['flightdata']['time'][0][0][0][0][0][0])                    # Time values           [s]
 
 
-""" 
-To update Fuel Component mass:
 
-components['FL'].mass_ = np.interp(t, time, fuel_mass)
+"""Plotting mass and c.g. over time"""
+
+x_cgs  = np.zeros(len(time))
+weights = np.zeros(len(time))
+
+for i in range(len(time)):
+    t = time[i]
+    if  measurement_shift.timestamps[1] <= t <= measurement_shift.timestamps[1]+3*60:                              #This also changes for our data
+        components[moved_pax].xcg_ = inches_to_m(moved_to)
+    else:
+        components[moved_pax].xcg_ = inches_to_m(288)      #THIS IS FOR SEAT 7
+    update_fuel_balance(t)
+    x_cgs[i] = components['TM'].xcg()
+    weights[i] = components['TM'].weight()
 
 
-Where t is a specific time
+plt.plot(time,x_cgs)
+plt.show()
 
-"""
-
-
-print(components['TM'].mass())
-print(components['TM'].xcg())
 
 
 
