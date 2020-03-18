@@ -128,8 +128,8 @@ fuel_mass = pounds_to_kg(FW)-fuel_out                                           
 time = np.array(matlab_data['flightdata']['time'][0][0][0][0][0][0])                    # Time values           [s]
 
 
-print(components['TM'].mass())
-print(components['TM'].xcg())
+#print(components['TM'].mass())
+#print(components['TM'].xcg())
 
 
 

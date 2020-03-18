@@ -31,8 +31,8 @@ W = components['TM'].weight()
 CN = W/(1/2*rho_0*VEAS**2*S)
 Cmd = -1/dde * CN * dxcg / c
 
-print("Cn is: ", CN)
-print("Cmd is:", Cmd)
+#print("Cn is: ", CN)
+#print("Cmd is:", Cmd)
 
 
 A = np.vstack([measurement_3.alphas, np.ones(len(measurement_3.alphas))]).T
@@ -55,4 +55,4 @@ if __name__ == '__main__':
 
     plt.show()
 
-print("Cma is:", Cma)
+#print("Cma is:", Cma)

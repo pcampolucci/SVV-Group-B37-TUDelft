@@ -10,11 +10,10 @@ from src.parameters_calculation.clcd_clalpha_plots import CLa, alpha_, CLs_, CDs
 from src.parameters_calculation.Moment_coefs_calc import Cma, measurement_3
 import statsmodels.api as sm
 import numpy as np
-from src.helpers.path import path
 
 
 # open file from XFLR5 simulation
-def open_simulation(filename):
+def open_xflr_simulation(filename):
 
     f = open(filename, "r")
     first_line = True
@@ -52,9 +51,9 @@ def open_simulation(filename):
     return alpha_lst, CL_lst, CD_lst, Cm_lst, names
 
 
-def plot_simulation(filename, print_info=True):
+def plot_xflr_simulation(filename, path, print_info=True):
 
-    alpha_lst, CL_lst, CD_lst, Cm_lst, names = open_simulation(filename)
+    alpha_lst, CL_lst, CD_lst, Cm_lst, names = open_xflr_simulation(filename)
 
     # plot CL-a
     plot([alpha_lst, alpha_], [CL_lst, CLs_], ["XFLR5", "Numerical Model"],
@@ -78,8 +77,3 @@ def plot_simulation(filename, print_info=True):
         print(f"Cm_alpha slope, XFLR5 vs numerical model: {cma} => {Cma}\n")
 
     return 0
-
-
-# execute code
-plot_simulation(path + "/src/verification/xflr_verification_data.txt")
-

@@ -20,12 +20,12 @@ CDs = drags/(0.5*measurement_1.rhos*measurement_1.VTASs**2*S)
 
 A = np.vstack([measurement_1.alphas, np.ones(len(measurement_1.alphas))]).T
 CLa, CL0 = np.linalg.lstsq(A, CLs, rcond=None)[0]
-print('CLa: ', CLa, 'CL0: ', CL0)
+#print('CLa: ', CLa, 'CL0: ', CL0)
 
 A = np.vstack([CLs**2, np.ones(len(CLs))]).T
 slope, CD0 = np.linalg.lstsq(A, CDs, rcond=None)[0]
 e = 1/slope/(b/c)/np.pi
-print('CD0: ', CD0, 'Oswald: ', e)
+#print('CD0: ', CD0, 'Oswald: ', e)
 
 alpha_ = np.linspace(-5, 15, 100)
 CLs_ = CL0 + CLa * alpha_
@@ -52,4 +52,4 @@ if __name__ == '__main__':
     plt.axvline(x=0, color='k')
     plt.show()
 
-print('Mach Range: ')
+#print('Mach Range: ')
