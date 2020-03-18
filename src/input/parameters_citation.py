@@ -1,16 +1,39 @@
-# Citation 550 - Linear simulation
-import numpy as np
+"""
+Title: Data for computations, fixed and derived from flight test data
 
+Author: B37
+"""
+
+# importing packages
+import numpy as np
+import src.simulation.response_flightest as data
+
+# types of motion to extrapolate
+motions = {
+    "PGH": {'time': 32490, 'step': 150, 'type': "SYM", 'name': "Phugoid Motion"},
+    "SP": {'time': 30390, 'step': 14, 'type': "SYM", 'name': "Short Period Motion"},
+    "DR": {'time': 34397, 'step': 15, 'type': "ASYM", 'name': "Dutch Roll Motion"},
+    "DRY": {'time': 35210, 'step': 15, 'type': "ASYM", 'name': "Dutch Roll Motion (Yaw, Damping)"},
+    "APR": {'time': 31606, 'step': 14, 'type': "ASYM", 'name': "Aperiodic Roll"}
+}
+
+# default, to be changed
+start  = 30390
+step   = 14
 
 # Stationary flight condition
-
-hp0    =  1000     	      # pressure altitude in the stationary flight condition [m]
-V0     =  100        # true airspeed in the stationary flight condition [m/sec]
-alpha0 =  0.02           # angle of attack in the stationary flight condition [rad]
-th0    =  0.06           # pitch angle in the stationary flight condition [rad]
+hp0    =  data.pressalt[start]     	# pressure altitude in the stationary flight condition [m]
+V0     =  data.TAS[start]           # true airspeed in the stationary flight condition [m/sec]
+alpha0 =  0.0                       # angle of attack in the stationary flight condition [rad]
+th0    =  0                         # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
-m      = 4157.174            # mass [kg]
+cabin  = 102+90+78+74+79+82+80+87+68
+fuel0  = 4100*0.453592
+fuel_b = np.cumsum(0.1 * np.ones(data.FMF.shape[0]) * data.FMF)
+fuel   = fuel0 - fuel_b
+m      = 4157.174 + cabin + fuel           # mass [kg] 4157.174
+m      = m[start]
 
 # aerodynamic properties
 e      = 0.8         # Oswald factor [ ]
