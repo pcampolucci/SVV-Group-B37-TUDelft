@@ -13,8 +13,9 @@ motions = {
     "PGH": {'time': 32490, 'step': 150, 'type': "SYM", 'name': "Phugoid Motion"},
     "SP": {'time': 30390, 'step': 14, 'type': "SYM", 'name': "Short Period Motion"},
     "DR": {'time': 34397, 'step': 15, 'type': "ASYM", 'name': "Dutch Roll Motion"},
-    "DRY": {'time': 35210, 'step': 15, 'type': "ASYM", 'name': "Dutch Roll Motion (Yaw, Damping)"},
-    "APR": {'time': 31606, 'step': 14, 'type': "ASYM", 'name': "Aperiodic Roll"}
+    "DRY": {'time': 35210, 'step': 15, 'type': "ASYM", 'name': "Dutch Roll Motion (YawDamping)"},
+    "APR": {'time': 31606, 'step': 14, 'type': "ASYM", 'name': "Aperiodic Roll"},
+    "SPI": {'time': 36760, 'step': 140, 'type': "ASYM", 'name': "Spiral Motion"}
 }
 
 # default, to be changed

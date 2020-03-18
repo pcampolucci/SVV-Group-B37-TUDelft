@@ -21,8 +21,9 @@ def run_simulation():
         "Phugoid Motion": "PGH",
         "Short Period Motion": "SP",
         "Dutch Roll Motion": "DR",
-        "Dutch Roll Motion (Yaw, Damping)": "DRY",
-        "Aperiodic Roll": "APR"
+        "Dutch Roll Motion (YawDamping)": "DRY",
+        "Aperiodic Roll": "APR",
+        "Spiral Motion": "SPI"
     }
 
 
