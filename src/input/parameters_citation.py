@@ -78,7 +78,7 @@ W      = m * g            # [N]       (aircraft weight)
 muc    = m / (rho * S * c)
 mub    = m / (rho * S * b)
 KX2    = 0.019
-KZ2    = 0.042
+KZ2    = 0.04743326  # 0.042 before optimisation
 KXZ    = 0.002
 KY2    = 1.25 * 1.114
 
@@ -114,7 +114,7 @@ Cmu    = +0.06990
 Cmadot = +0.17800
 Cmq    = -8.79415
 
-CYb    = -0.7500
+CYb    = -2.75078396  # -0.7500 before optimisation
 CYbdot =  0
 CYp    = -0.0304
 CYr    = +0.8495
@@ -130,6 +130,6 @@ Cldr   = +0.03440
 Cnb    =  +0.1348
 Cnbdot =   0
 Cnp    =  -0.0602
-Cnr    =  -0.2061
+Cnr    =  0.00330453  # -0.2061 before optimisation
 Cnda   =  -0.0120
 Cndr   =  -0.0939

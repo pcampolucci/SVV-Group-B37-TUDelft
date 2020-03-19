@@ -1,5 +1,7 @@
 """
 Title: path file to the repo for executable
+
+Author: Pietro Campolucci
 """
 
 # import packages

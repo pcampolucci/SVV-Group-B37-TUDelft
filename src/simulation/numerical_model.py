@@ -1,7 +1,7 @@
 """
 Title: Numerical Model for symmetric and asymmetric response
 
-Author: Marco Desiderio, Eneko
+Author: Marco Desiderio, Eneko Rodriguez
 Review: Pietro Campolucci
 """
 
