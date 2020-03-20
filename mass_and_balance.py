@@ -83,27 +83,27 @@ fuel_xcgs = fuel_moments/fuel_loads
 components = {}
 
 # """ Seats Our Data """
-# components['Seat 1'] = Component(inches_to_m(131), 102)
-# components['Seat 2'] = Component(inches_to_m(131), 0)
-# components['Seat 3'] = Component(inches_to_m(214), 74)
-# components['Seat 4'] = Component(inches_to_m(214), 79)
-# components['Seat 5'] = Component(inches_to_m(251), 82)
-# components['Seat 6'] = Component(inches_to_m(251), 80)
-# components['Seat 7'] = Component(inches_to_m(288), 87)
-# components['Seat 8'] = Component(inches_to_m(288), 68)
-# components['Seat 10'] = Component(inches_to_m(170), 78)
+components['Seat 1'] = Component(inches_to_m(131), 102)
+components['Seat 2'] = Component(inches_to_m(131), 0)
+components['Seat 3'] = Component(inches_to_m(214), 74)
+components['Seat 4'] = Component(inches_to_m(214), 79)
+components['Seat 5'] = Component(inches_to_m(251), 82)
+components['Seat 6'] = Component(inches_to_m(251), 80)
+components['Seat 7'] = Component(inches_to_m(288), 87)
+components['Seat 8'] = Component(inches_to_m(288), 68)
+components['Seat 10'] = Component(inches_to_m(170), 78)
 
 
 """ Seats Reference Data"""
-components['Seat 1'] = Component(inches_to_m(131), 95)
-components['Seat 2'] = Component(inches_to_m(131), 92)
-components['Seat 3'] = Component(inches_to_m(214), 74)
-components['Seat 4'] = Component(inches_to_m(214), 66)
-components['Seat 5'] = Component(inches_to_m(251), 61)
-components['Seat 6'] = Component(inches_to_m(251), 75)
-components['Seat 7'] = Component(inches_to_m(288), 78)
-components['Seat 8'] = Component(inches_to_m(288), 86)
-components['Seat 10'] = Component(inches_to_m(170), 68)
+# components['Seat 1'] = Component(inches_to_m(131), 95)
+# components['Seat 2'] = Component(inches_to_m(131), 92)
+# components['Seat 3'] = Component(inches_to_m(214), 74)
+# components['Seat 4'] = Component(inches_to_m(214), 66)
+# components['Seat 5'] = Component(inches_to_m(251), 61)
+# components['Seat 6'] = Component(inches_to_m(251), 75)
+# components['Seat 7'] = Component(inches_to_m(288), 78)
+# components['Seat 8'] = Component(inches_to_m(288), 86)
+# components['Seat 10'] = Component(inches_to_m(170), 68)
 
 
 """ Baggage """
