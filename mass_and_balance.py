@@ -161,7 +161,7 @@ weights = np.zeros(len(time))
 
 for i in range(len(time)):
     t = time[i]
-    if  measurement_shift.timestamps[1] <= t <= measurement_shift.timestamps[1]+3*60:                              #This also changes for our data
+    if  measurement_shift.timestamps[0] <= t <= measurement_shift.timestamps[1]:                              #This also changes for our data
         components[moved_pax].xcg_ = inches_to_m(moved_to)
     else:
         components[moved_pax].xcg_ = inches_to_m(288)      #THIS IS FOR SEAT 7
