@@ -9,6 +9,7 @@ Review: Pietro Campolucci
 import numpy as np
 import matplotlib.pyplot as plt
 import control as c
+from src.helpers.path import path
 
 # import dependencies
 import src.simulation.response_flightest as data
@@ -308,6 +309,7 @@ class Simulate:
 
             plt.xlabel('Time [s]')
             ax1.set_title(f'{self.title}, m = {round(m, 2)} kg', fontweight = 'bold')
+            plt.savefig(path + "/src/simulation/optimised_plots/" + self.title, dpi=250)
             plt.show()
 
         return eigenvalues

@@ -218,6 +218,3 @@ def optimise_all():
     for i in range(len(optimised_values)):
         print(f"{values[i]} gets from {x0[i]} to {optimised_values[i]}")
 
-
-optimise_all()
-

@@ -11,11 +11,13 @@ from src.verification.run_verification import run_verification
 from src.optimization.run_optimisation import run_optimisation
 
 # TWEAK THESE VALUES TO CHOOSE THE OUTPUT
+yes_verbose = False
 yes_plot = False
 yes_parameters = False
 yes_simulation = True
 yes_verification = False
 yes_optimisation = False
+yes_full_optimisation = False
 
 if yes_parameters:
     print("=" * 100)
@@ -39,4 +41,4 @@ if yes_optimisation:
     print("=" * 100)
     print("Starting Optimisation Session")
     print("=" * 100, "\n")
-    run_optimisation()
+    run_optimisation(debug=yes_verbose, full=yes_full_optimisation)

@@ -26,5 +26,3 @@ def run_optimisation(debug=False, full=False):
         optimise_aperiodic_roll(debug=debug)
 
 
-# NOTE: Full takes some time
-run_optimisation()
