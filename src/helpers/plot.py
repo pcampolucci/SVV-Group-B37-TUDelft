@@ -1,6 +1,6 @@
 """
 Title: General plotting function
-    - Created so that plots in the report will be consistent
+    - Created so that parameters_plots in the report will be consistent
 
 Author: Casper Kanaar 
 """

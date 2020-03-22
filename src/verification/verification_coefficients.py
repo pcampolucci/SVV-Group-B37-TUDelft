@@ -57,15 +57,15 @@ def plot_xflr_simulation(filename, path, print_info=True, show_plot=True):
 
     # plot CL-a
     plot([alpha_lst, alpha_], [CL_lst, CLs_], ["XFLR5", "Numerical Model"],
-         "CL - a", ["alpha [deg]", "CL"], path + "/src/verification/verification_plots/CL - a", multi=True, show=show_plot)
+         "CL - a", ["alpha [deg]", "CL"], path + "/src/plots/verification_plots/CL - a", multi=True, show=show_plot)
 
     # plot CL-CD
     plot([np.array(CD_lst), CDs_], [CL_lst, CLs_], ["XFLR5", "Numerical Model"],
-         "CL - CD", ["CD", "CL"], path + "/src/verification/verification_plots/CL - CD", multi=True,  show=show_plot)
+         "CL - CD", ["CD", "CL"], path + "/src/plots/verification_plots/CL - CD", multi=True,  show=show_plot)
 
     # plot Cm-a
     plot([alpha_lst, measurement_3.alphas], [Cm_lst, measurement_3.des], ["XFLR5", "Numerical Model"],
-         "Cm - a", ["alpha [deg]", "Cm"],  path + "/src/verification/verification_plots/Cm - a", multi=True,  show=show_plot)
+         "Cm - a", ["alpha [deg]", "Cm"],  path + "/src/plots/verification_plots/Cm - a", multi=True,  show=show_plot)
 
     # get slopes and regression
     cla = sm.OLS(CL_lst, alpha_lst).fit().params

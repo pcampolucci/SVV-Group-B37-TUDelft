@@ -15,4 +15,4 @@ def run_verification(show_plot=True):
 
     plot_xflr_simulation(xflr_path, path, show_plot=show_plot)
 
-    print(f"Saving plots to {path}/src/verification/verification_plots")
+    print(f"Saving plots to {path}/src/plots/verification_plots")

@@ -22,7 +22,7 @@ for t in measurement_3.timestamps:
 Veq_tilde = measurement_3.VEASs*np.sqrt(Ws/np.array(W))             # Reduced Equivalent Velocity
 Fe_star = measurement_3.Fes*Ws/W                                    # Reduced Force Stick
 
-""" Regression of datapoints obtained for both plots"""
+""" Regression of datapoints obtained for both parameters_plots"""
 A = np.vstack([1/Veq_tilde**2, np.ones(len(Veq_tilde))]).T
 a_, b_ = np.linalg.lstsq(A, def_star, rcond=None)[0]
 

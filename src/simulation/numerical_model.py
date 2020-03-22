@@ -309,7 +309,7 @@ class Simulate:
 
             plt.xlabel('Time [s]')
             ax1.set_title(f'{self.title}, m = {round(m, 2)} kg', fontweight = 'bold')
-            plt.savefig(path + "/src/simulation/optimised_plots/" + self.title, dpi=250)
+            plt.savefig(path + "/src/plots/optimised_plots/" + self.title, dpi=250)
             plt.show()
 
         return eigenvalues
