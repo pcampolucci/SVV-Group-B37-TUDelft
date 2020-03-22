@@ -18,12 +18,12 @@ import control as c
 from scipy.optimize import minimize
 
 
-def optimise_dutch_roll():
+def optimise_dutch_roll(debug=False):
 
     def dutch_roll_error(params):
 
         # define derivatives for dutch roll
-        KZ2, Cnr, CYb = params
+        Cnr, CYb = params
 
         # input parameters
         motion = motions["DR"]
@@ -41,11 +41,11 @@ def optimise_dutch_roll():
 
         # compute state spaces with 3 tunable derivatives
         C1 = np.matrix([[(par.CYbdot - 2 * par.mub) * par.b / V0, 0, 0, 0],
-                                [0, -par.b / (2 * V0), 0, 0],
-                                [0, 0, -2 * par.mub * par.KX2 * (par.b ** 2) / (V0 ** 2),
-                                 2 * par.mub * par.KXZ * (par.b ** 2) / (V0 ** 2)],
-                                [par.Cnbdot * (par.b) / (V0), 0, 2 * par.mub * par.KXZ * (par.b ** 2) / (V0 ** 2),
-                                 -2 * par.mub * KZ2 * (par.b ** 2) / (V0 ** 2)]])
+                        [0, -par.b / (2 * V0), 0, 0],
+                        [0, 0, -2 * par.mub * par.KX2 * (par.b ** 2) / (V0 ** 2),
+                         2 * par.mub * par.KXZ * (par.b ** 2) / (V0 ** 2)],
+                        [par.Cnbdot * (par.b) / (V0), 0, 2 * par.mub * par.KXZ * (par.b ** 2) / (V0 ** 2),
+                         -2 * par.mub * par.KZ2 * (par.b ** 2) / (V0 ** 2)]])
 
         C2 = np.matrix([[CYb, par.CL, par.CYp * (par.b) / (2 * V0), (par.CYr - 4 * par.mub) * (par.b) / (2 * V0)],
                         [0, 0, par.b / (2 * V0), 0],
@@ -95,7 +95,15 @@ def optimise_dutch_roll():
         rr_g = sys_response[1][2]
         yr_g = sys_response[1][3]
 
-        error = sum(abs(ra - ra_g)) + sum(abs(rr - rr_g)) + sum(abs(yr - yr_g))
+        # plot error and normalise
+        error_a = sum(abs((ra - ra_g)/(max(ra) - min(ra))))/len(ra) # pitch
+        error_b = sum(abs((rr - rr_g)/(max(rr) - min(rr))))/len(rr)  # pitchrate
+        error_c = sum(abs((yr - yr_g)/(max(yr) - min(yr))))/len(yr)  # aoa
+
+        error = (error_a + error_b + error_c) / 3
+
+        if debug:
+            print(f"Single values errors: roll angle = {error_a}, roll rate = {error_b}, yaw rate = {error_c}")
 
         return error
 
@@ -105,15 +113,16 @@ def optimise_dutch_roll():
     print("Optimisation for Dutch roll motion")
     print("=" * 100, "\n")
 
-    values = ["KZ2", "Cnr", "CYb"]
-    x0 = np.array([par.KZ2, par.Cnr, par.CYb])
+    values = ["Cnr", "CYb"]
+    x0 = np.array([par.Cnr, par.CYb])
 
-    print(f"Current error for Dutch roll is: {dutch_roll_error(x0)}\n")
+    start_error = dutch_roll_error(x0)
 
-    res = minimize(dutch_roll_error, x0, method='nelder-mead', options={'xatol': 1e-8, 'disp': True})
+    res = minimize(dutch_roll_error, x0, method='nelder-mead',  options={'xatol': 1e-12})
 
     optimised_values = res.x
 
-    print()
+    print(f"Ran {res.nit} iterations\n")
+    print(f"Error went down from {start_error} to {res.fun}\n")
     for i in range(len(optimised_values)):
         print(f"{values[i]} gets from {x0[i]} to {optimised_values[i]}")

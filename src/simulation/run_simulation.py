@@ -12,6 +12,20 @@ from src.simulation.numerical_model import Simulate
 
 def run_simulation():
 
+    get_eigenvalues_symmetric = Simulate(motions['PGH'])
+    eigenvalues_symmetric = get_eigenvalues_symmetric.motion_report(show=False)
+
+    get_eigenvalues_asymmetric = Simulate(motions['DR'])
+    eigenvalues_asymmetric = get_eigenvalues_asymmetric.motion_report(show=False)
+
+    print(f"Eigenvalues for symmetric EOM are: \n")
+    for ev in eigenvalues_symmetric:
+        print(ev, "\n")
+
+    print(f"Eigenvalues for asymmetric EOM are: \n")
+    for ev in eigenvalues_asymmetric:
+        print(ev, "\n")
+
     window = tkinter.Tk()
 
     window.geometry("%dx%d+%d+%d" % (330, 80, 200, 150))
@@ -26,11 +40,10 @@ def run_simulation():
         "Spiral Motion": "SPI"
     }
 
-
     def plot_motion(motion):
+        display.config(text=f"Plotting for {motion}")
         init_plotting = Simulate(motions[data[motion]])
         init_plotting.motion_report()
-        display.config(text=f"Plotting for {motion}")
 
 
     # execute program
@@ -43,3 +56,5 @@ def run_simulation():
     display.pack()
 
     window.mainloop()
+
+    print("\n... exiting")

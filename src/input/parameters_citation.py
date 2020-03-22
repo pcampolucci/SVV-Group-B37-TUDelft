@@ -37,13 +37,13 @@ m      = 4157.174 + cabin + fuel           # mass [kg] 4157.174
 m      = m[start]
 
 # aerodynamic properties
-e      = 0.8         # Oswald factor [ ]
-CD0    = 0.04        # Zero lift drag coefficient [ ]
-CLa    = 5.084       # Slope of CL-alpha curve [ ]
+e      = 0.78         # Oswald factor [ ]
+CD0    = 0.021        # Zero lift drag coefficient [ ]
+CLa    = 0.08       # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
-Cma    =  -0.5626           # longitudinal stabilty [ ]
-Cmde   =  -1.1642           # elevator effectiveness [ ]
+Cma    =  -0.725           # longitudinal stabilty [ ]
+Cmde   =  -1.512           # elevator effectiveness [ ]
 
 # Aircraft geometry
 
@@ -78,7 +78,7 @@ W      = m * g            # [N]       (aircraft weight)
 muc    = m / (rho * S * c)
 mub    = m / (rho * S * b)
 KX2    = 0.019
-KZ2    = 0.04743326  # 0.042 before optimisation
+KZ2    = 0.042
 KXZ    = 0.002
 KY2    = 1.25 * 1.114
 
@@ -94,27 +94,27 @@ depsda = 4 / (A + 2)            # Downwash gradient [ ]
 CL = 2 * W / (rho * V0 ** 2 * S)              # Lift coefficient [ ]
 CD = CD0 + (CLa * alpha0) ** 2 / (np.pi * A * e) # Drag coefficient [ ]
 
-# Stabiblity derivatives
+# Stabiblity derivatives subjected to optimisation
 
-CX0    = W * np.sin(th0) / (0.5 * rho * V0 ** 2 * S)
-CXu    = -0.095
-CXa    = +0.47966		# Positive! (has been erroneously negative since 1993)
+CX0    = W * np.sin(th0) / (0.5 * rho * V0 ** 2 * S)  # do not tweak
+CXu    = -0.08368199988749644 # -0.095
+CXa    = -0.07763650050760139 # +0.47966		# Positive! (has been erroneously negative since 1993)
 CXadot = +0.08330
 CXq    = -0.28170
 CXde   = -0.03728
 
-CZ0    = -W * np.cos(th0) / (0.5 * rho * V0 ** 2 * S)
-CZu    = -0.37616
-CZa    = -5.74340
+CZ0    = -W * np.cos(th0) / (0.5 * rho * V0 ** 2 * S)  # do not tweak
+CZu    = -0.9895177921517261 # -0.37616
+CZa    = -5.795166947573803  # -5.74340
 CZadot = -0.00350
 CZq    = -5.66290
 CZde   = -0.69612
 
-Cmu    = +0.06990
-Cmadot = +0.17800
-Cmq    = -8.79415
+Cmu    = 0.05997299778919825 # +0.06990
+Cmadot = 1.9647153421455705 # +0.17800
+Cmq    = -10.44375502346348 # -8.79415
 
-CYb    = -2.75078396  # -0.7500 before optimisation
+CYb    = -3.8969164196214683 # -0.7500
 CYbdot =  0
 CYp    = -0.0304
 CYr    = +0.8495
@@ -122,7 +122,7 @@ CYda   = -0.0400
 CYdr   = +0.2300
 
 Clb    = -0.10260
-Clp    = -0.71085
+Clp    = -0.9420970769486041  # -0.71085
 Clr    = +0.23760
 Clda   = -0.23088
 Cldr   = +0.03440
@@ -130,6 +130,6 @@ Cldr   = +0.03440
 Cnb    =  +0.1348
 Cnbdot =   0
 Cnp    =  -0.0602
-Cnr    =  0.00330453  # -0.2061 before optimisation
+Cnr    =  0.10798041327461753 # 0.00330453
 Cnda   =  -0.0120
 Cndr   =  -0.0939

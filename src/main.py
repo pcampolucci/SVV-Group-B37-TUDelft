@@ -5,13 +5,23 @@ Author: Pietro Campolucci
 """
 
 # import executables
+from src.parameters_calculation.run_parameters_calculation import run_parameters_calculation
 from src.simulation.run_simulation import run_simulation
 from src.verification.run_verification import run_verification
 from src.optimization.run_optimisation import run_optimisation
 
+# TWEAK THESE VALUES TO CHOOSE THE OUTPUT
+yes_plot = False
+yes_parameters = False
 yes_simulation = True
-yes_verification = True
-yes_optimisation = True
+yes_verification = False
+yes_optimisation = False
+
+if yes_parameters:
+    print("=" * 100)
+    print("Starting Parameters Retrieval")
+    print("=" * 100, "\n")
+    run_parameters_calculation(show_plot=yes_plot)
 
 if yes_simulation:
     print("=" * 100)
@@ -23,7 +33,7 @@ if yes_verification:
     print("=" * 100)
     print("Starting Verification of Static Parameters")
     print("=" * 100)
-    run_verification()
+    run_verification(show_plot=yes_plot)
 
 if yes_optimisation:
     print("=" * 100)

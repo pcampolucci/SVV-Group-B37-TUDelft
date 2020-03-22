@@ -6,8 +6,8 @@ Author: Pietro Campolucci
 
 # importing packages
 from src.helpers.plot import plot
-from src.parameters_calculation.clcd_clalpha_plots import CLa, alpha_, CLs_, CDs_
-from src.parameters_calculation.Moment_coefs_calc import Cma, measurement_3
+from src.parameters_calculation.get_polars import CLa, alpha_, CLs_, CDs_
+from src.parameters_calculation.get_coefs_mom import Cma, measurement_3
 import statsmodels.api as sm
 import numpy as np
 
@@ -51,21 +51,21 @@ def open_xflr_simulation(filename):
     return alpha_lst, CL_lst, CD_lst, Cm_lst, names
 
 
-def plot_xflr_simulation(filename, path, print_info=True):
+def plot_xflr_simulation(filename, path, print_info=True, show_plot=True):
 
     alpha_lst, CL_lst, CD_lst, Cm_lst, names = open_xflr_simulation(filename)
 
     # plot CL-a
     plot([alpha_lst, alpha_], [CL_lst, CLs_], ["XFLR5", "Numerical Model"],
-         "CL - a", ["alpha [deg]", "CL"], path + "/src/verification/verification_plots/CL - a", multi=True)
+         "CL - a", ["alpha [deg]", "CL"], path + "/src/verification/verification_plots/CL - a", multi=True, show=show_plot)
 
     # plot CL-CD
     plot([np.array(CD_lst), CDs_], [CL_lst, CLs_], ["XFLR5", "Numerical Model"],
-         "CL - CD", ["CD", "CL"], path + "/src/verification/verification_plots/CL - CD", multi=True)
+         "CL - CD", ["CD", "CL"], path + "/src/verification/verification_plots/CL - CD", multi=True,  show=show_plot)
 
     # plot Cm-a
     plot([alpha_lst, measurement_3.alphas], [Cm_lst, measurement_3.des], ["XFLR5", "Numerical Model"],
-         "Cm - a", ["alpha [deg]", "Cm"],  path + "/src/verification/verification_plots/Cm - a", multi=True)
+         "Cm - a", ["alpha [deg]", "Cm"],  path + "/src/verification/verification_plots/Cm - a", multi=True,  show=show_plot)
 
     # get slopes and regression
     cla = sm.OLS(CL_lst, alpha_lst).fit().params
