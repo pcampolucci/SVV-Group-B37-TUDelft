@@ -10,12 +10,12 @@ from src.input.parameters_citation import motions
 from src.simulation.numerical_model import Simulate
 
 
-def run_simulation():
+def run_simulation(width, height):
 
-    get_eigenvalues_symmetric = Simulate(motions['PGH'])
+    get_eigenvalues_symmetric = Simulate(motions['PGH'], width, height)
     eigenvalues_symmetric = get_eigenvalues_symmetric.motion_report(show=False)
 
-    get_eigenvalues_asymmetric = Simulate(motions['DR'])
+    get_eigenvalues_asymmetric = Simulate(motions['DR'], width, height)
     eigenvalues_asymmetric = get_eigenvalues_asymmetric.motion_report(show=False)
 
     print(f"Eigenvalues for symmetric EOM are: \n")
@@ -42,7 +42,7 @@ def run_simulation():
 
     def plot_motion(motion):
         display.config(text=f"Plotting for {motion}")
-        init_plotting = Simulate(motions[data[motion]])
+        init_plotting = Simulate(motions[data[motion]], width, height)
         init_plotting.motion_report()
 
 

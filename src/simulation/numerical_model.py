@@ -22,11 +22,13 @@ DEBUG = False
 class Simulate:
     """ class for simulation of symmetric and asymmetric periods """
 
-    def __init__(self, motion):
+    def __init__(self, motion, width, height):
         self.start = motion['time']
         self.step = motion['step']
         self.case = motion['type']
         self.title = motion['name']
+        self.w = width
+        self.h = height
 
     def motion_report(self, show=True):
 
@@ -164,6 +166,8 @@ class Simulate:
             for i in range(len(tableau20)):
                 r, g, b = tableau20[i]
                 tableau20[i] = (r / 255., g / 255., b / 255.)
+
+            plt.figure(figsize=[self.w, self.h])
 
             # do the plotting for symmetric
             if case == 'SYM':
