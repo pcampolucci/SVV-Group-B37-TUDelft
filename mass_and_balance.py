@@ -172,6 +172,24 @@ time = np.array(matlab_data['flightdata']['time'][0][0][0][0][0][0])            
 # plt.show()
 #
 
+"""Plotting mass and c.g. over time"""
+
+x_cgs  = np.zeros(len(time))
+weights = np.zeros(len(time))
+
+for i in range(len(time)):
+    t = time[i]
+    if  measurement_shift.timestamps[0] <= t <= measurement_shift.timestamps[1]:                              #This also changes for our data
+        components[moved_pax].xcg_ = inches_to_m(moved_to)
+    else:
+        components[moved_pax].xcg_ = inches_to_m(288)      #THIS IS FOR SEAT 7
+    update_fuel_balance(t)
+    x_cgs[i] = components['TM'].xcg()
+    weights[i] = components['TM'].weight()
+
+
+plt.plot(time,x_cgs)
+plt.show()
 
 
 
