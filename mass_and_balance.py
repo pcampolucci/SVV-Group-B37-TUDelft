@@ -7,14 +7,10 @@ import matplotlib.pyplot as plt
 from scipy import integrate
 from flight_data import *
 
-
 FW = 4050      # [lbs]
 
-
-
-
-def update_fuel_balance(t):
-    components['FL'].mass_ = np.interp(t, time, fuel_mass)
+def update_fuel_balance(Fused):
+    components['FL'].mass_ = FIni-Fused
     components['FL'].xcg_  = np.interp(components['FL'].mass(), fuel_loads, fuel_xcgs)
 
 
@@ -79,31 +75,32 @@ fuel_moments = lbsinch_to_kgm(np.array([298.16, 591.18, 879.08, 1165.42, 1448.40
 
 fuel_xcgs = fuel_moments/fuel_loads
 
-
+plt.plot(fuel_loads, fuel_xcgs)
+plt.show()
 components = {}
 
-# """ Seats Our Data """
-# components['Seat 1'] = Component(inches_to_m(131), 102)
-# components['Seat 2'] = Component(inches_to_m(131), 0)
-# components['Seat 3'] = Component(inches_to_m(214), 74)
-# components['Seat 4'] = Component(inches_to_m(214), 79)
-# components['Seat 5'] = Component(inches_to_m(251), 82)
-# components['Seat 6'] = Component(inches_to_m(251), 80)
-# components['Seat 7'] = Component(inches_to_m(288), 87)
-# components['Seat 8'] = Component(inches_to_m(288), 68)
-# components['Seat 10'] = Component(inches_to_m(170), 78)
-
-
-""" Seats Reference Data"""
-components['Seat 1'] = Component(inches_to_m(131), 95)
-components['Seat 2'] = Component(inches_to_m(131), 92)
+""" Seats Our Data """
+components['Seat 1'] = Component(inches_to_m(131), 102)
+components['Seat 2'] = Component(inches_to_m(131), 0)
 components['Seat 3'] = Component(inches_to_m(214), 74)
-components['Seat 4'] = Component(inches_to_m(214), 66)
-components['Seat 5'] = Component(inches_to_m(251), 61)
-components['Seat 6'] = Component(inches_to_m(251), 75)
-components['Seat 7'] = Component(inches_to_m(288), 78)
-components['Seat 8'] = Component(inches_to_m(288), 86)
-components['Seat 10'] = Component(inches_to_m(170), 68)
+components['Seat 4'] = Component(inches_to_m(214), 79)
+components['Seat 5'] = Component(inches_to_m(251), 82)
+components['Seat 6'] = Component(inches_to_m(251), 80)
+components['Seat 7'] = Component(inches_to_m(288), 87)
+components['Seat 8'] = Component(inches_to_m(288), 68)
+components['Seat 10'] = Component(inches_to_m(170), 78)
+
+
+# """ Seats Reference Data"""
+# components['Seat 1'] = Component(inches_to_m(131), 95)
+# components['Seat 2'] = Component(inches_to_m(131), 92)
+# components['Seat 3'] = Component(inches_to_m(214), 66)
+# components['Seat 4'] = Component(inches_to_m(214), 61)
+# components['Seat 5'] = Component(inches_to_m(251), 75)
+# components['Seat 6'] = Component(inches_to_m(251), 78)
+# components['Seat 7'] = Component(inches_to_m(288), 86)
+# components['Seat 8'] = Component(inches_to_m(288), 68)
+# components['Seat 10'] = Component(inches_to_m(170), 74)
 
 
 """ Baggage """
@@ -128,7 +125,8 @@ components['FL'] = Component(np.interp(pounds_to_kg(FW), fuel_xcgs, fuel_loads),
 """ Total Mass """
 components['TM'] = Group([components['ZFM'], components['FL']])
 
-print(components['TM'].mass())
+RM = components['TM'].mass()
+FIni = components['FL'].mass()
 
 """
 components[name].mass() to get mass     [kg]
@@ -153,25 +151,27 @@ fuel_mass = pounds_to_kg(FW)-fuel_out                                           
 time = np.array(matlab_data['flightdata']['time'][0][0][0][0][0][0])                    # Time values           [s]
 
 
+#
+# """Plotting mass and c.g. over time"""
+#
+# x_cgs  = np.zeros(len(time))
+# weights = np.zeros(len(time))
+#
+# for i in range(len(time)):
+#     t = time[i]
+#     if  measurement_shift.timestamps[1] <= t <= measurement_shift.timestamps[1]+3*60:                              #This also changes for our data
+#         components[moved_pax].xcg_ = inches_to_m(moved_to)
+#     else:
+#         components[moved_pax].xcg_ = inches_to_m(288)      #THIS IS FOR SEAT 7
+#     # update_fuel_balance()
+#     x_cgs[i] = components['TM'].xcg()
+#     weights[i] = components['TM'].weight()
+# #
+# #
+# plt.plot(time, x_cgs)
+# plt.show()
+#
 
-"""Plotting mass and c.g. over time"""
-
-x_cgs  = np.zeros(len(time))
-weights = np.zeros(len(time))
-
-for i in range(len(time)):
-    t = time[i]
-    if  measurement_shift.timestamps[1] <= t <= measurement_shift.timestamps[1]+3*60:                              #This also changes for our data
-        components[moved_pax].xcg_ = inches_to_m(moved_to)
-    else:
-        components[moved_pax].xcg_ = inches_to_m(288)      #THIS IS FOR SEAT 7
-    update_fuel_balance(t)
-    x_cgs[i] = components['TM'].xcg()
-    weights[i] = components['TM'].weight()
-
-
-plt.plot(time,x_cgs)
-plt.show()
 
 
 

@@ -2,21 +2,15 @@ from mass_and_balance import *
 import matplotlib.pyplot as plt
 from flight_data import *
 from flight_conditions import *
-
 import numpy as np
-
-
-
 
 thrusts = np.loadtxt('measurement_1_thrust.dat')
 drags = thrusts[:,0] + thrusts[:,1]
 
-
 weights = []
 
-for t in measurement_1.timestamps:
-    update_fuel_balance(t)
-    weights.append(components['TM'].weight())
+for i in range(len(measurement_1.timestamps)):
+    weights.append((RM-measurement_1.Fused[i])*g)
 
 lifts = np.array(weights)
 
@@ -31,11 +25,8 @@ A = np.vstack([CLs**2, np.ones(len(CLs))]).T
 slope, CD0 = np.linalg.lstsq(A, CDs, rcond=None)[0]
 e = 1/slope/(b/c)/np.pi
 
-print('VTAS', measurement_1.VTASs)
-print('rhos', measurement_1.rhos)
-print('T', measurement_1.Ts)
-print('Tm', measurement_1.Tms)
-print('ps', measurement_1.ps)
+
+print('cls', CLs, CDs)
 
 print('CD0: ', CD0, 'Oswald: ', e)
 

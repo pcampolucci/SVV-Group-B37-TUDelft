@@ -10,12 +10,9 @@ thrusts_m3s = np.loadtxt('measurement_3s_thrust.dat')
 thrusts_m3 = thrusts_m3[:,0] + thrusts_m3[:, 1]
 thrusts_m3s = thrusts_m3s[:,0] + thrusts_m3s[:, 1]
 
-print(thrusts_m3, thrusts_m3s)
 """ Determine Thrust Coefficient and Standard Thrust Coefficient """
-CTs_m3 = thrusts_m3/(0.5*measurement_3s.rhos*measurement_3s.VTASs**2*D**2)
-print(CTs_m3)
+CTs_m3 = thrusts_m3/(0.5*measurement_3.rhos*measurement_3.VTASs**2*D**2)
 CTs_m3s = thrusts_m3s/(0.5*measurement_3s.rhos*measurement_3s.VTASs**2*D**2)
-print(CTs_m3s)
 def_star = measurement_3.des - 1/Cmd*CmTc*(CTs_m3s - CTs_m3)        # Reduced Deflection
 
 W = []
@@ -25,6 +22,7 @@ for t in measurement_3.timestamps:
 
 Veq_tilde = measurement_3.VEASs*np.sqrt(Ws/np.array(W))             # Reduced Equivalent Velocity
 Fe_star = measurement_3.Fes*Ws/W                                    # Reduced Force Stick
+
 
 """ Regression of datapoints obtained for both plots"""
 A = np.vstack([1/Veq_tilde**2, np.ones(len(Veq_tilde))]).T
