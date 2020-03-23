@@ -51,10 +51,10 @@ class Simulate:
         # build model
         if case == 'SYM':
             elev_defs = data.delta_e*np.pi/180
-            elev_defs = elev_defs[start:stop] + 0.006609799562442952  # normalise elevator input
+            elev_defs = elev_defs[start:stop] - elev_defs[start]  #+ 0.006609799562442952  # normalise elevator input
 
         elif case == 'ASYM':
-            delta_a = data.delta_a*np.pi/180 - 0.005479673656854227  # normalise aileron input
+            delta_a = data.delta_a * np.pi / 180 - data.delta_a[start]*np.pi/180 - 0.015*np.pi/180 # normalise aileron input
             delta_r = data.delta_r*np.pi/180 + 0.006386078365702277  # normalise rudder input
             inputs = np.vstack([delta_a, delta_r])
             inputs = inputs[:, start:stop]
@@ -309,7 +309,7 @@ class Simulate:
 
             plt.xlabel('Time [s]')
             ax1.set_title(f'{self.title}, m = {round(m, 2)} kg', fontweight = 'bold')
-            plt.savefig(path + "/src/plots/optimised_plots/" + self.title, dpi=250)
+            plt.savefig(path + "/src/plots/optimised_plots/" + self.title + ".pdf", dpi=250)
             plt.show()
 
         return eigenvalues

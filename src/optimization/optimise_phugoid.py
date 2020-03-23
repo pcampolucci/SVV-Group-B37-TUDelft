@@ -33,7 +33,7 @@ def optimise_phugoid(debug=False):
         V0 = data.TAS[start]  # true airspeed in the stationary flight condition [m/sec]
 
         elev_defs = data.delta_e * np.pi / 180
-        elev_defs = elev_defs[start:stop] + 0.006609799562442952  # normalise elevator input
+        elev_defs = elev_defs[start:stop] - elev_defs[start]  # normalise elevator input
 
         C1 = np.matrix([[-2 * par.muc * par.c / (V0 ** 2), 0, 0, 0],
                         [0, (par.CZadot - 2 * par.muc) * par.c / V0, 0, 0],

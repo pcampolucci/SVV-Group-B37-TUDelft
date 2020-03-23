@@ -1,8 +1,8 @@
 """
-Title: Optimization Script for Aperiodic Roll
+Title: Optimization Script for Spiral Motion
 
 Description: The values to optimize will be
-             - Clp
+             - Clb, Clr, CYb, Cnp
 
 author: Pietro Campolucci
 """
@@ -16,15 +16,15 @@ import control as c
 from scipy.optimize import minimize
 
 
-def optimise_aperiodic_roll(debug=False):
+def optimise_spiral_motion(debug=False):
 
-    def aperiodic_roll_error(params):
+    def aperiodic_spiral_motion(params):
 
         # define derivatives for dutch roll
-        Clp, dummy = params
+        Clb, Clr, Cnp = params
 
         # input parameters
-        motion = motions["APR"]
+        motion = motions["SPI"]
         start = motion['time']
         step = motion['step']
         stop = start + step * 10
@@ -47,8 +47,8 @@ def optimise_aperiodic_roll(debug=False):
 
         C2 = np.matrix([[par.CYb, par.CL, par.CYp * (par.b) / (2 * V0), (par.CYr - 4 * par.mub) * (par.b) / (2 * V0)],
                         [0, 0, par.b / (2 * V0), 0],
-                        [par.Clb, 0, Clp * (par.b) / (2 * V0), par.Clr * (par.b) / (2 * V0)],
-                        [par.Cnb, 0, par.Cnp * (par.b) / (2 * V0), par.Cnr * (par.b) / (2 * V0)]])
+                        [Clb, 0, par.Clp * (par.b) / (2 * V0), Clr * (par.b) / (2 * V0)],
+                        [par.Cnb, 0, Cnp * (par.b) / (2 * V0), par.Cnr * (par.b) / (2 * V0)]])
 
         C3 = -np.matrix([[par.CYda, par.CYdr],
                          [0, 0],
@@ -108,16 +108,14 @@ def optimise_aperiodic_roll(debug=False):
 
     # EXECUTE OPTIMIZATION
     print("=" * 100)
-    print("Optimisation for Aperiodic roll motion")
+    print("Optimisation for Spiral motion")
     print("=" * 100, "\n")
 
-    dummy = 0
+    values = ["Clb", "Clr", "Cnp"]
+    x0 = np.array([par.Clb, par.Clr, par.Cnp])
+    start_error = aperiodic_spiral_motion(x0)
 
-    values = ["Clp", "dummy"]
-    x0 = np.array([par.Clp, dummy])
-    start_error = aperiodic_roll_error(x0)
-
-    res = minimize(aperiodic_roll_error, x0, method='nelder-mead', options={'xatol': 1e-12})
+    res = minimize(aperiodic_spiral_motion, x0, method='nelder-mead', options={'xatol': 1e-12})
 
     optimised_values = res.x
 

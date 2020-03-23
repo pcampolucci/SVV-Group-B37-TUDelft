@@ -16,8 +16,8 @@ yes_plot = False
 yes_parameters = False
 yes_simulation = True
 yes_verification = False
-yes_optimisation = False
-yes_full_optimisation = False
+yes_optimisation = True
+yes_full_optimisation = False  # don't run this one
 
 if yes_parameters:
     print("=" * 100)

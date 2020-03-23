@@ -2,9 +2,7 @@
 Title: Optimization Script for Dutch Roll Method
 
 Description: The values to optimize will be
-             - Kz
-             - Cnr
-             - Cyb
+             - Cnr, Cyb, Cnb
 
 author: Pietro Campolucci
 """
@@ -23,7 +21,7 @@ def optimise_dutch_roll(debug=False):
     def dutch_roll_error(params):
 
         # define derivatives for dutch roll
-        Cnr, CYb = params
+        Cnr, CYb, Cnb = params
 
         # input parameters
         motion = motions["DR"]
@@ -34,7 +32,7 @@ def optimise_dutch_roll(debug=False):
         # Stationary flight condition
         V0 = data.TAS[start]  # true airspeed in the stationary flight condition [m/sec]
 
-        delta_a = data.delta_a * np.pi / 180 - 0.005479673656854227  # normalise aileron input
+        delta_a = data.delta_a * np.pi / 180 - data.delta_a[start]*np.pi/180 - 0.015*np.pi/180  # normalise aileron input
         delta_r = data.delta_r * np.pi / 180 + 0.006386078365702277  # normalise rudder input
         inputs = np.vstack([delta_a, delta_r])
         inputs = inputs[:, start:stop]
@@ -50,7 +48,7 @@ def optimise_dutch_roll(debug=False):
         C2 = np.matrix([[CYb, par.CL, par.CYp * (par.b) / (2 * V0), (par.CYr - 4 * par.mub) * (par.b) / (2 * V0)],
                         [0, 0, par.b / (2 * V0), 0],
                         [par.Clb, 0, par.Clp * (par.b) / (2 * V0), par.Clr * (par.b) / (2 * V0)],
-                        [par.Cnb, 0, par.Cnp * (par.b) / (2 * V0), Cnr * (par.b) / (2 * V0)]])
+                        [Cnb, 0, par.Cnp * (par.b) / (2 * V0), Cnr * (par.b) / (2 * V0)]])
 
         C3 = -np.matrix([[par.CYda, par.CYdr],
                          [0, 0],
@@ -113,8 +111,8 @@ def optimise_dutch_roll(debug=False):
     print("Optimisation for Dutch roll motion")
     print("=" * 100, "\n")
 
-    values = ["Cnr", "CYb"]
-    x0 = np.array([par.Cnr, par.CYb])
+    values = ["Cnr", "CYb", "Cnb"]
+    x0 = np.array([par.Cnr, par.CYb, par.Cnb])
 
     start_error = dutch_roll_error(x0)
 

@@ -10,12 +10,12 @@ import src.simulation.response_flightest as data
 
 # types of motion to extrapolate
 motions = {
-    "PGH": {'time': 32490, 'step': 150, 'type': "SYM", 'name': "Phugoid Motion"},
+    "PGH": {'time': 32450, 'step': 130, 'type': "SYM", 'name': "Phugoid Motion"},
     "SP": {'time': 30390, 'step': 14, 'type': "SYM", 'name': "Short Period Motion"},
     "DR": {'time': 34397, 'step': 15, 'type': "ASYM", 'name': "Dutch Roll Motion"},
     "DRY": {'time': 35210, 'step': 15, 'type': "ASYM", 'name': "Dutch Roll Motion (YawDamping)"},
     "APR": {'time': 31606, 'step': 14, 'type': "ASYM", 'name': "Aperiodic Roll"},
-    "SPI": {'time': 36760, 'step': 140, 'type': "ASYM", 'name': "Spiral Motion"}
+    "SPI": {'time': 36754, 'step': 120, 'type': "ASYM", 'name': "Spiral Motion"}
 }
 
 # default, to be changed
@@ -114,7 +114,7 @@ Cmu    = 0.05997299778919825 # +0.06990
 Cmadot = 1.9647153421455705 # +0.17800
 Cmq    = -10.44375502346348 # -8.79415
 
-CYb    = -3.8969164196214683 # -0.7500
+CYb    = -1.9409732115893352 # -0.7500
 CYbdot =  0
 CYp    = -0.0304
 CYr    = +0.8495
@@ -127,9 +127,9 @@ Clr    = +0.23760
 Clda   = -0.23088
 Cldr   = +0.03440
 
-Cnb    =  +0.1348
+Cnb    =  0.11409549484087164
 Cnbdot =   0
 Cnp    =  -0.0602
-Cnr    =  0.10798041327461753 # 0.00330453
+Cnr    =  -0.06123272796102534 # 0.00330453
 Cnda   =  -0.0120
 Cndr   =  -0.0939

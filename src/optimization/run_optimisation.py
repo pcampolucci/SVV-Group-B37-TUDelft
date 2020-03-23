@@ -9,6 +9,7 @@ from src.optimization.optimise_dutch_roll import optimise_dutch_roll
 from src.optimization.optimise_short_period import optimise_short_period
 from src.optimization.optimise_phugoid import optimise_phugoid
 from src.optimization.optimise_aperiodic_roll import optimise_aperiodic_roll
+from src.optimization.optimise_spiral import optimise_spiral_motion
 from src.optimization.optimise_all import optimise_all
 
 
@@ -24,5 +25,6 @@ def run_optimisation(debug=False, full=False):
         optimise_short_period(debug=debug)
         optimise_phugoid(debug=debug)
         optimise_aperiodic_roll(debug=debug)
+        optimise_spiral_motion(debug=debug)
 
 
